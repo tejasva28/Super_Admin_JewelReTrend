@@ -1,0 +1,80 @@
+[
+  {
+    "name": ["Gold Necklace Set", false],
+    "seller": "Raj Jewellers",
+    "quantity": 120,
+    "date": "10.Jun.2023"
+  },
+  {
+    "name": ["Diamond Earrings"],
+    "seller": "Kalyan Jewellers",
+    "quantity": 75,
+    "date": "15.May.2023"
+  },
+  {
+    "name": ["Silver Bracelet"],
+    "seller": "Tanishq",
+    "quantity": 150,
+    "date": "01.Jul.2023"
+  },
+  {
+    "name": ["Platinum Ring"],
+    "seller": "Malabar Gold",
+    "quantity": 90,
+    "date": "25.Apr.2023"
+  },
+  {
+    "name": ["Ruby Pendant"],
+    "seller": "Tribhovandas Bhimji Zaveri",
+    "quantity": 50,
+    "date": "12.Aug.2023"
+  },
+  {
+    "name": ["Antique Gold Bangles"],
+    "seller": "Amrapali Jewels",
+    "quantity": 30,
+    "date": "05.Sept.2023"
+  },
+  {
+    "name": ["Sapphire Necklace"],
+    "seller": "Senco Gold",
+    "quantity": 20,
+    "date": "17.Oct.2023"
+  },
+  {
+    "name": ["Emerald Stud Earrings"],
+    "seller": "PC Jeweller",
+    "quantity": 200,
+    "date": "11.Jul.2023"
+  },
+  {
+    "name": ["Kundan Choker"],
+    "seller": "Raniwala 1881",
+    "quantity": 80,
+    "date": "08.Nov.2023"
+  },
+  {
+    "name": ["Temple Jewellery Set"],
+    "seller": "Joyalukkas",
+    "quantity": 40,
+    "date": "22.Dec.2023"
+  },
+  {
+    "name": ["Pearl Drop Earrings"],
+    "seller": "Bhima Jewellers",
+    "quantity": 110,
+    "date": "29.Mar.2023"
+  },
+  {
+    "name": ["Meenakari Bangle Set"],
+    "seller": "Kothari Jewellers",
+    "quantity": 60,
+    "date": "19.Feb.2023"
+  },
+  {
+    "name": ["Navratna Ring"],
+    "seller": "Khazana Jewellery",
+    "quantity": 25,
+    "date": "09.Jan.2023"
+  }
+]
