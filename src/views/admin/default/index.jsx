@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useState } from 'react';
 
 // Assets
 import Usa from "assets/img/dashboards/usa.png";
@@ -40,8 +41,28 @@ import tableDataDevelopment from "views/admin/dataTables/variables/tableDataDeve
 // Render Component
 export default function Dashboard() {
   // Chakra Color Mode
+  const [timeRange, setTimeRange] = useState('24hours');
   const brandColor = useColorModeValue("brand.500", "white");
   const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+
+  const handleTimeRangeChange = (event) => {
+    setTimeRange(event.target.value);
+  };
+
+  const getValueForTimeRange = (range) => {
+    switch (range) {
+      case '24hours':
+        return '2935';
+      case '1week':
+        return '20485';
+      case '1month':
+        return '89234';
+      case 'year':
+        return '1056789';
+      default:
+        return '2935';
+    }
+  };
 
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
@@ -59,8 +80,8 @@ export default function Dashboard() {
               icon={<Icon w="32px" h="32px" as={MdBarChart} color={brandColor} />}
             />
           }
-          name="Earnings"
-          value="$350.4"
+          name="Profits"
+          value="INR 10,000,00"
         />
         <MiniStatistics
           startContent={
@@ -73,10 +94,10 @@ export default function Dashboard() {
               }
             />
           }
-          name="Spend this month"
-          value="$642.39"
+          name="Total SKU's"
+          value="59"
         />
-        <MiniStatistics growth="+23%" name="Sales" value="$574.34" />
+        <MiniStatistics growth="+23%" name="Sales" value="INR 50,000,00" />
         <MiniStatistics
           endContent={
             <Flex me="-16px" mt="10px">
@@ -88,16 +109,16 @@ export default function Dashboard() {
                 variant="mini"
                 mt="5px"
                 me="0px"
-                defaultValue="usd"
+                defaultValue="INR"
               >
-                <option value="usd">USD</option>
-                <option value="eur">EUR</option>
+                <option value="usd">INR</option>
+                <option value="eur">USD</option>
                 <option value="gba">GBA</option>
               </Select>
             </Flex>
           }
-          name="Your balance"
-          value="$1,000"
+          name="Appraisers"
+          value="25"
         />
         <MiniStatistics
           startContent={
@@ -108,8 +129,8 @@ export default function Dashboard() {
               icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
             />
           }
-          name="New Tasks"
-          value="154"
+          name="Products Live"
+          value="40"
         />
         <MiniStatistics
           startContent={
@@ -122,8 +143,25 @@ export default function Dashboard() {
               }
             />
           }
-          name="Total Projects"
-          value="2935"
+        endContent={
+         <Flex me="-16px" mt="10px">
+              <Select
+                id="timeRange"
+                variant="mini"
+                mt="5px"
+                me="0px"
+                value={timeRange}
+                onChange={handleTimeRangeChange}
+              >
+                <option value="24hours">24 Hours</option>
+                <option value="1week">1 Week</option>
+                <option value="1month">1 Month</option>
+                <option value="year">Year</option>
+              </Select>
+            </Flex>
+          }
+          name="Visitors Today"
+          value={getValueForTimeRange(timeRange)}
         />
       </SimpleGrid>
 

@@ -1,9 +1,11 @@
 // Daily Traffic Dashboards Default
 
+// Daily Traffic Dashboards Default for Jewelry Categories
+
 export const barChartDataDailyTraffic = [
   {
     name: "Daily Traffic",
-    data: [20, 30, 40, 20, 45, 50, 30],
+    data: [100, 150, 200, 250, 300, 350, 400], // Example: Traffic on each category
   },
 ];
 
@@ -18,17 +20,10 @@ export const barChartOptionsDailyTraffic = {
       fontSize: "12px",
       fontFamily: undefined,
     },
-    onDatasetHover: {
-      style: {
-        fontSize: "12px",
-        fontFamily: undefined,
-      },
-    },
     theme: "dark",
   },
   xaxis: {
-    categories: ["00", "04", "08", "12", "14", "16", "18"],
-    show: false,
+    categories: ["Rings", "Necklaces", "Bracelets", "Earrings", "Pendants", "Bangles", "Watches"], // Jewelry categories
     labels: {
       show: true,
       style: {
@@ -37,16 +32,8 @@ export const barChartOptionsDailyTraffic = {
         fontWeight: "500",
       },
     },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
   },
   yaxis: {
-    show: false,
-    color: "black",
     labels: {
       show: true,
       style: {
@@ -55,24 +42,9 @@ export const barChartOptionsDailyTraffic = {
       },
     },
   },
-  grid: {
-    show: false,
-    strokeDashArray: 5,
-    yaxis: {
-      lines: {
-        show: true,
-      },
-    },
-    xaxis: {
-      lines: {
-        show: false,
-      },
-    },
-  },
   fill: {
     type: "gradient",
     gradient: {
-      type: "vertical",
       shadeIntensity: 1,
       opacityFrom: 0.7,
       opacityTo: 0.9,
@@ -103,20 +75,23 @@ export const barChartOptionsDailyTraffic = {
   },
 };
 
+
 // Consumption Users Reports
+
+// Consumption Report - Jewelry Products
 
 export const barChartDataConsumption = [
   {
-    name: "PRODUCT A",
-    data: [400, 370, 330, 390, 320, 350, 360, 320, 380],
+    name: "Gold Rings",
+    data: [450, 400, 470, 420, 480, 500, 520, 490, 470],
   },
   {
-    name: "PRODUCT B",
-    data: [400, 370, 330, 390, 320, 350, 360, 320, 380],
+    name: "Diamond Necklaces",
+    data: [300, 280, 290, 320, 310, 330, 340, 310, 320],
   },
   {
-    name: "PRODUCT C",
-    data: [400, 370, 330, 390, 320, 350, 360, 320, 380],
+    name: "Silver Bracelets",
+    data: [150, 140, 160, 170, 180, 200, 210, 190, 180],
   },
 ];
 
@@ -130,19 +105,11 @@ export const barChartOptionsConsumption = {
   tooltip: {
     style: {
       fontSize: "12px",
-      fontFamily: undefined,
-    },
-    onDatasetHover: {
-      style: {
-        fontSize: "12px",
-        fontFamily: undefined,
-      },
     },
     theme: "dark",
   },
   xaxis: {
-    categories: ["17", "18", "19", "20", "21", "22", "23", "24", "25"],
-    show: false,
+    categories: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8", "Week 9"], // Weeks for sales tracking
     labels: {
       show: true,
       style: {
@@ -151,50 +118,17 @@ export const barChartOptionsConsumption = {
         fontWeight: "500",
       },
     },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
   },
   yaxis: {
     show: false,
-    color: "black",
-    labels: {
-      show: false,
-      style: {
-        colors: "#A3AED0",
-        fontSize: "14px",
-        fontWeight: "500",
-      },
-    },
   },
-
   grid: {
     borderColor: "rgba(163, 174, 208, 0.3)",
     show: true,
-    yaxis: {
-      lines: {
-        show: false,
-        opacity: 0.5,
-      },
-    },
-    row: {
-      opacity: 0.5,
-    },
-    xaxis: {
-      lines: {
-        show: false,
-      },
-    },
   },
   fill: {
     type: "solid",
     colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
-  },
-  legend: {
-    show: false,
   },
   colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
   dataLabels: {
@@ -208,38 +142,14 @@ export const barChartOptionsConsumption = {
   },
 };
 
+
+// Pie Chart for Jewelry Inventory (Gold, Silver, Diamond)
+
 export const pieChartOptions = {
-  labels: ["Your files", "System", "Empty"],
-  colors: ["#4318FF", "#6AD2FF", "#EFF4FB"],
+  labels: ["Gold Inventory", "Diamond Inventory", "Silver Inventory"],
+  colors: ["#FFD700", "#B9F2FF", "#C0C0C0"], // Colors representing gold, diamond, silver
   chart: {
     width: "50px",
-  },
-  states: {
-    hover: {
-      filter: {
-        type: "none",
-      },
-    },
-  },
-  legend: {
-    show: false,
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  hover: { mode: null },
-  plotOptions: {
-    donut: {
-      expandOnClick: false,
-      donut: {
-        labels: {
-          show: false,
-        },
-      },
-    },
-  },
-  fill: {
-    colors: ["#4318FF", "#6AD2FF", "#EFF4FB"],
   },
   tooltip: {
     enabled: true,
@@ -247,18 +157,17 @@ export const pieChartOptions = {
   },
 };
 
-export const pieChartData = [63, 25, 12];
+export const pieChartData = [50, 30, 20]; // Percentage of inventory
 
-// Total Spent Default
 
 export const lineChartDataTotalSpent = [
   {
     name: "Revenue",
-    data: [50, 64, 48, 66, 49, 68],
+    data: [10000, 12000, 11000, 13000, 12500, 14000], // Revenue values
   },
   {
     name: "Profit",
-    data: [30, 40, 24, 46, 20, 46],
+    data: [7000, 8000, 7500, 8500, 8200, 9000], // Profit values
   },
 ];
 
@@ -282,21 +191,9 @@ export const lineChartOptionsTotalSpent = {
     colors: "white",
     strokeColors: "#7551FF",
     strokeWidth: 3,
-    strokeOpacity: 0.9,
-    strokeDashArray: 0,
-    fillOpacity: 1,
-    discrete: [],
-    shape: "circle",
-    radius: 2,
-    offsetX: 0,
-    offsetY: 0,
-    showNullDataPoints: true,
   },
   tooltip: {
     theme: "dark",
-  },
-  dataLabels: {
-    enabled: false,
   },
   stroke: {
     curve: "smooth",
@@ -304,7 +201,7 @@ export const lineChartOptionsTotalSpent = {
   },
   xaxis: {
     type: "numeric",
-    categories: ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"],
+    categories: ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"], // Monthly tracking
     labels: {
       style: {
         colors: "#A3AED0",
@@ -312,25 +209,8 @@ export const lineChartOptionsTotalSpent = {
         fontWeight: "500",
       },
     },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
   },
   yaxis: {
     show: false,
   },
-  legend: {
-    show: false,
-  },
-  grid: {
-    show: false,
-    column: {
-      color: ["#7551FF", "#39B8FF"],
-      opacity: 0.5,
-    },
-  },
-  color: ["#7551FF", "#39B8FF"],
 };
