@@ -1,0 +1,62 @@
+[
+  {
+    "id": "PH01",
+    "name": "Rahul Verma",
+    "address": "45 MG Road, Indore, India",
+    "status": "Approved"
+  },
+  {
+    "id": "PH02",
+    "name": "Suman Jain",
+    "address": "12 R.N.T. Marg, Indore, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "PH03",
+    "name": "Amit Sharma",
+    "address": "23 Race Course Road, Indore, India",
+    "status": "Approved"
+  },
+  {
+    "id": "PH04",
+    "name": "Pooja Singh",
+    "address": "78 Palasia Square, Indore, India",
+    "status": "Approved"
+  },
+  {
+    "id": "PH05",
+    "name": "Vikas Gupta",
+    "address": "56 Vijay Nagar, Indore, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "PH06",
+    "name": "Sneha Patel",
+    "address": "34 Sapna Sangeeta Road, Indore, India",
+    "status": "Approved"
+  },
+  {
+    "id": "PH07",
+    "name": "Manoj Kumar",
+    "address": "90 Khajrana Road, Indore, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "PH08",
+    "name": "Priyanka Joshi",
+    "address": "67 Ring Road, Indore, India",
+    "status": "Approved"
+  },
+  {
+    "id": "PH09",
+    "name": "Deepak Mehta",
+    "address": "22 AB Road, Indore, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "PH10",
+    "name": "Anita Chawla",
+    "address": "11 Tilak Nagar, Indore, India",
+    "status": "Approved"
+  }
+]

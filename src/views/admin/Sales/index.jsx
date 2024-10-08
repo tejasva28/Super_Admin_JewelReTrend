@@ -22,20 +22,20 @@
 
 // Chakra imports
 import { Box, SimpleGrid } from "@chakra-ui/react";
-import DevelopmentTable from "views/admin/dataTables/components/DevelopmentTable";
-import CurrentStocks from "views/admin/dataTables/components/CurrentStocks";
-import ColumnsTable from "views/admin/dataTables/components/ColumnsTable";
-import ComplexTable from "views/admin/dataTables/components/ComplexTable";
+import DevelopmentTable from "views/admin/Sales/components/DevelopmentTable";
+import CurrentStocks from "views/admin/Sales/components/CurrentStocks";
+import ColumnsTable from "views/admin/Sales/components/ColumnsTable";
+import ComplexTable from "views/admin/Sales/components/ComplexTable";
 import {
   columnsDataDevelopment,
   columnsDataCheck,
   columnsDataColumns,
   columnsDataComplex,
-} from "views/admin/dataTables/variables/columnsData";
-import tableDataDevelopment from "views/admin/dataTables/variables/tableDataDevelopment.json";
-import tableDataCheck from "views/admin/dataTables/variables/tableDataCheck.json";
-import tableDataColumns from "views/admin/dataTables/variables/tableDataColumns.json";
-import tableDataComplex from "views/admin/dataTables/variables/tableDataComplex.json";
+} from "views/admin/Sales/variables/columnsData";
+import tableDataDevelopment from "views/admin/Sales/variables/tableDataDevelopment.json";
+import tableDataCheck from "views/admin/Sales/variables/tableDataCheck.json";
+import tableDataColumns from "views/admin/Sales/variables/tableDataColumns.json";
+import tableDataComplex from "views/admin/Sales/variables/tableDataComplex.json";
 import React from "react";
 
 export default function Settings() {
@@ -56,14 +56,14 @@ export default function Settings() {
           mb='20px'
           columns={{ sm: 1, md: 2 }}
           spacing={{ base: "20px", xl: "20px" }}>
-          <ComplexTable
+          {/* <ComplexTable
             columnsData={columnsDataComplex}
             tableData={tableDataComplex}
           />
           <ColumnsTable
             columnsData={columnsDataColumns}
             tableData={tableDataColumns}
-          />
+          /> */}
         </SimpleGrid>
       
     </Box>

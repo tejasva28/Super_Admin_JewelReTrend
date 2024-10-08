@@ -1,10 +1,8 @@
 /* eslint-disable */
 
 import {
-  Box,
   Flex,
-  Icon,
-  Progress,
+  Box,
   Table,
   Tbody,
   Td,
@@ -14,6 +12,8 @@ import {
   Tr,
   useColorModeValue,
 } from '@chakra-ui/react';
+import * as React from 'react';
+
 import {
   createColumnHelper,
   flexRender,
@@ -21,17 +21,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+
 // Custom components
 import Card from 'components/card/Card';
 import Menu from 'components/menu/MainMenu';
-import * as React from 'react';
-// Assets
-import { MdCancel, MdCheckCircle, MdOutlineError } from 'react-icons/md';
 
 const columnHelper = createColumnHelper();
 
 // const columns = columnsDataCheck;
-export default function ComplexTable(props) {
+export default function ColumnTable(props) {
   const { tableData } = props;
   const [sorting, setSorting] = React.useState([]);
   const textColor = useColorModeValue('secondaryGray.900', 'white');
@@ -58,8 +56,8 @@ export default function ComplexTable(props) {
         </Flex>
       ),
     }),
-    columnHelper.accessor('status', {
-      id: 'status',
+    columnHelper.accessor('progress', {
+      id: 'progress',
       header: () => (
         <Text
           justifyContent="space-between"
@@ -67,38 +65,31 @@ export default function ComplexTable(props) {
           fontSize={{ sm: '10px', lg: '12px' }}
           color="gray.400"
         >
-          STATUS
+          PROGRESS
         </Text>
       ),
       cell: (info) => (
-        <Flex align="center">
-          <Icon
-            w="24px"
-            h="24px"
-            me="5px"
-            color={
-              info.getValue() === 'Approved'
-                ? 'green.500'
-                : info.getValue() === 'Disable'
-                ? 'red.500'
-                : info.getValue() === 'Error'
-                ? 'orange.500'
-                : null
-            }
-            as={
-              info.getValue() === 'Approved'
-                ? MdCheckCircle
-                : info.getValue() === 'Disable'
-                ? MdCancel
-                : info.getValue() === 'Error'
-                ? MdOutlineError
-                : null
-            }
-          />
-          <Text color={textColor} fontSize="sm" fontWeight="700">
-            {info.getValue()}
-          </Text>
-        </Flex>
+        <Text color={textColor} fontSize="sm" fontWeight="700">
+          {info.getValue()}
+        </Text>
+      ),
+    }),
+    columnHelper.accessor('quantity', {
+      id: 'quantity',
+      header: () => (
+        <Text
+          justifyContent="space-between"
+          align="center"
+          fontSize={{ sm: '10px', lg: '12px' }}
+          color="gray.400"
+        >
+          QUANTITY
+        </Text>
+      ),
+      cell: (info) => (
+        <Text color={textColor} fontSize="sm" fontWeight="700">
+          {info.getValue()}
+        </Text>
       ),
     }),
     columnHelper.accessor('date', {
@@ -117,30 +108,6 @@ export default function ComplexTable(props) {
         <Text color={textColor} fontSize="sm" fontWeight="700">
           {info.getValue()}
         </Text>
-      ),
-    }),
-    columnHelper.accessor('progress', {
-      id: 'progress',
-      header: () => (
-        <Text
-          justifyContent="space-between"
-          align="center"
-          fontSize={{ sm: '10px', lg: '12px' }}
-          color="gray.400"
-        >
-          PROGRESS
-        </Text>
-      ),
-      cell: (info) => (
-        <Flex align="center">
-          <Progress
-            variant="table"
-            colorScheme="brandScheme"
-            h="8px"
-            w="108px"
-            value={info.getValue()}
-          />
-        </Flex>
       ),
     }),
   ];
@@ -167,10 +134,11 @@ export default function ComplexTable(props) {
         <Text
           color={textColor}
           fontSize="22px"
+          mb="4px"
           fontWeight="700"
           lineHeight="100%"
         >
-          Complex Table
+          4-Columns Table
         </Text>
         <Menu />
       </Flex>
@@ -213,7 +181,7 @@ export default function ComplexTable(props) {
           <Tbody>
             {table
               .getRowModel()
-              .rows.slice(0, 5)
+              .rows.slice(0, 11)
               .map((row) => {
                 return (
                   <Tr key={row.id}>

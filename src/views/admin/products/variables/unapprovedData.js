@@ -2,7 +2,7 @@ const unapprovedProducts = [
     {
       id: 1,
       name: "Gold Necklace",
-      image: "https://example.com/gold_necklace.png", 
+      image: "https://cdn.caratlane.com/media/catalog/product/cache/6/image/480x480/9df78eab33525d08d6e5fb8d27136e95/J/R/JR03641-WRP900_11_listfront.jpg", 
       price: 50000,
       status: "pending",
       category: "Necklace",
@@ -13,7 +13,7 @@ const unapprovedProducts = [
     {
       id: 2,
       name: "Diamond Earrings",
-      image: "https://example.com/diamond_earrings.png",
+      image: "https://cdn.caratlane.com/media/catalog/product/J/R/JR03317-YGP600_3_lar.jpg",
       price: 80000,
       status: "pending",
       category: "Earrings",
@@ -24,7 +24,7 @@ const unapprovedProducts = [
     {
       id: 3,
       name: "Platinum Ring",
-      image: "https://example.com/platinum_ring.png",
+      image: "https://cdn.caratlane.com/media/catalog/product/S/R/SR02012-YGP900_1_lar.jpg",
       price: 120000,
       status: "pending",
       category: "Ring",
@@ -35,7 +35,7 @@ const unapprovedProducts = [
     {
       id: 4,
       name: "Sapphire Necklace",
-      image: "https://example.com/sapphire_necklace.png",
+      image: "https://cdn.caratlane.com/media/catalog/product/J/T/JT02103-1RP900_1_lar.jpg",
       price: 150000,
       status: "pending",
       category: "Necklace",

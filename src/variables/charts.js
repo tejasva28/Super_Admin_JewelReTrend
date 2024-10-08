@@ -5,7 +5,7 @@
 export const barChartDataDailyTraffic = [
   {
     name: "Daily Traffic",
-    data: [100, 150, 200, 250, 300, 350, 400], // Example: Traffic on each category
+    data: [100, 150, 200, 250], // Example: Traffic on each category
   },
 ];
 
@@ -23,7 +23,6 @@ export const barChartOptionsDailyTraffic = {
     theme: "dark",
   },
   xaxis: {
-    categories: ["Rings", "Necklaces", "Bracelets", "Earrings", "Pendants", "Bangles", "Watches"], // Jewelry categories
     labels: {
       show: true,
       style: {
@@ -144,12 +143,42 @@ export const barChartOptionsConsumption = {
 
 
 // Pie Chart for Jewelry Inventory (Gold, Silver, Diamond)
-
 export const pieChartOptions = {
   labels: ["Gold Inventory", "Diamond Inventory", "Silver Inventory"],
-  colors: ["#FFD700", "#B9F2FF", "#C0C0C0"], // Colors representing gold, diamond, silver
+  colors: ["#FFD700", "#B9F2FF", "#C0C0C0"], // Colors for gold, diamond, silver
   chart: {
-    width: "50px",
+    type: 'pie',
+    height: '200%',  // Let the chart fill the container height
+    width: '200%',   // Let the chart fill the container width
+    responsive: true,
+    maintainAspectRatio: false,  // Allow chart to stretch as needed
+  },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '70%'  // Adjust this if you're using a donut chart
+      }
+    }
+  },
+  legend: {
+    position: 'bottom',  // Move the legend below the pie chart
+    labels: {
+      colors: ['#FFFFFF'],  // Adjust colors for light or dark themes
+    },
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: function (val) {
+      return val + "%";  // Add percentage symbol to labels
+    },
+    style: {
+      fontSize: '14px',
+      fontFamily: 'Arial, sans-serif',
+      colors: ['#FFF'],  // Label color adjustment for dark backgrounds
+    },
+    dropShadow: {
+      enabled: false
+    }
   },
   tooltip: {
     enabled: true,
@@ -157,7 +186,7 @@ export const pieChartOptions = {
   },
 };
 
-export const pieChartData = [50, 30, 20]; // Percentage of inventory
+export const pieChartData = [50, 30, 20];  // Example data
 
 
 export const lineChartDataTotalSpent = [

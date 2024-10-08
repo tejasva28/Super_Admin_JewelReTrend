@@ -39,25 +39,33 @@ function Sidebar(props) {
 
   // SIDEBAR
   return (
-    <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
-      <Box
-        bg={sidebarBg}
-        transition={variantChange}
-        w='300px'
-        h='100vh'
-        m={sidebarMargins}
-        minH='100%'
-        overflowX='hidden'
-        boxShadow={shadow}>
-        <Scrollbars
-          autoHide
-          renderTrackVertical={renderTrack}
-          renderThumbVertical={renderThumb}
-          renderView={renderView}>
-          <Content routes={routes} />
-        </Scrollbars>
+    <>
+      {/* Sidebar for Large Screens */}
+      <Box display={{ base: "none", xl: "block" }} w="100%" position="fixed" minH="100%">
+        <Box
+          bg={sidebarBg}
+          transition={variantChange}
+          w="300px"
+          h="100vh"
+          m={sidebarMargins}
+          minH="100%"
+          overflowX="hidden"
+          boxShadow={shadow}
+        >
+          <Scrollbars
+            autoHide
+            renderTrackVertical={renderTrack}
+            renderThumbVertical={renderThumb}
+            renderView={renderView}
+          >
+            <Content routes={routes} />
+          </Scrollbars>
+        </Box>
       </Box>
-    </Box>
+
+      {/* Sidebar for Mobile (Drawer) */}
+      <SidebarResponsive routes={routes} />
+    </>
   );
 }
 
@@ -65,58 +73,62 @@ function Sidebar(props) {
 export function SidebarResponsive(props) {
   let sidebarBackgroundColor = useColorModeValue("white", "navy.800");
   let menuColor = useColorModeValue("gray.400", "white");
-  // // SIDEBAR
+
+  // Disclosure for Drawer
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
   const { routes } = props;
-  // let isWindows = navigator.platform.startsWith("Win");
-  //  BRAND
-  const sidebarRoutes = routes.filter((route) => route.sidebar !== false);
-
 
   return (
-    <Flex display={{ sm: "flex", xl: "none" }} alignItems='center'>
-      <Flex ref={btnRef} w='max-content' h='max-content' onClick={onOpen}>
-        <Icon
-          as={IoMenuOutline}
-          color={menuColor}
-          my='auto'
-          w='20px'
-          h='20px'
-          me='10px'
-          _hover={{ cursor: "pointer" }}
-        />
-      </Flex>
+    <>
+      {/* Hamburger Menu Icon for Mobile */}
+      <Flex display={{ base: "flex", xl: "none" }} alignItems="center">
+        <Flex ref={btnRef} w="max-content" h="max-content" onClick={onOpen}>
+          <Icon
+            as={IoMenuOutline}
+            color={menuColor}
+            my="auto"
+            w="24px"
+            h="24px"
+            me="10px"
+            _hover={{ cursor: "pointer" }}
+          />
+        </Flex>
+        </Flex>
+
+      {/* Drawer for Mobile Sidebar */}
       <Drawer
         isOpen={isOpen}
         onClose={onClose}
         placement={document.documentElement.dir === "rtl" ? "right" : "left"}
-        finalFocusRef={btnRef}>
+        finalFocusRef={btnRef}
+      >
         <DrawerOverlay />
-        <DrawerContent w='285px' maxW='285px' bg={sidebarBackgroundColor}>
+        <DrawerContent w="285px" maxW="285px" bg={sidebarBackgroundColor}>
           <DrawerCloseButton
-            zIndex='3'
-            onClose={onClose}
+            zIndex="3"
+            onClick={onClose}
             _focus={{ boxShadow: "none" }}
             _hover={{ boxShadow: "none" }}
           />
-          <DrawerBody maxW='285px' px='0rem' pb='0'>
+          <DrawerBody maxW="285px" px="0rem" pb="0">
             <Scrollbars
               autoHide
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
-              renderView={renderView}>
-              <Content routes={sidebarRoutes} />
+              renderView={renderView}
+            >
+              <Content routes={routes} />
             </Scrollbars>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </Flex>
+    </>
   );
 }
-// PROPS
 
+// PROPS
 Sidebar.propTypes = {
   logoText: PropTypes.string,
   routes: PropTypes.arrayOf(PropTypes.object),

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "AP001",
+    "name": "Rakesh Kumar",
+    "address": "123 MG Road, Delhi, India",
+    "status": "Approved"
+  },
+  {
+    "id": "AP002",
+    "name": "Anjali Patel",
+    "address": "456 Ring Road, Ahmedabad, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "AP003",
+    "name": "Vikram Singh",
+    "address": "789 Nehru Street, Bangalore, India",
+    "status": "Approved"
+  },
+  {
+    "id": "AP004",
+    "name": "Priya Sharma",
+    "address": "101 GT Road, Kolkata, India",
+    "status": "Approved"
+  },
+  {
+    "id": "AP005",
+    "name": "Sunil Mehta",
+    "address": "55 Marine Drive, Mumbai, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "AP006",
+    "name": "Kavita Nair",
+    "address": "88 Tech Park, Kochi, India",
+    "status": "Approved"
+  },
+  {
+    "id": "AP007",
+    "name": "Manish Gupta",
+    "address": "202 Connaught Place, Delhi, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "AP008",
+    "name": "Neha Joshi",
+    "address": "777 Lake Road, Pune, India",
+    "status": "Approved"
+  },
+  {
+    "id": "AP009",
+    "name": "Arjun Reddy",
+    "address": "34 Residency Road, Hyderabad, India",
+    "status": "Rejected"
+  },
+  {
+    "id": "AP010",
+    "name": "Sneha Bhatt",
+    "address": "9 MG Road, Surat, India",
+    "status": "Approved"
+  }
+]

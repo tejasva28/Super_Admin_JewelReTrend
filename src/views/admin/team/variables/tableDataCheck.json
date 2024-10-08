@@ -1,0 +1,82 @@
+[
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "number": "123-456-7890",
+    "employeeId": "E001",
+    "access": "Admin"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "number": "987-654-3210",
+    "employeeId": "E002",
+    "access": "User"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "number": "555-123-4567",
+    "employeeId": "E003",
+    "access": "User"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Bob Brown",
+    "email": "bob.brown@example.com",
+    "number": "444-987-6543",
+    "employeeId": "E004",
+    "access": "Admin"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Charlie Davis",
+    "email": "charlie.davis@example.com",
+    "number": "222-333-4444",
+    "employeeId": "E005",
+    "access": "Viewer"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Emily White",
+    "email": "emily.white@example.com",
+    "number": "999-888-7777",
+    "employeeId": "E006",
+    "access": "User"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Michael Green",
+    "email": "michael.green@example.com",
+    "number": "111-222-3333",
+    "employeeId": "E007",
+    "access": "Admin"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Laura Blue",
+    "email": "laura.blue@example.com",
+    "number": "666-555-4444",
+    "employeeId": "E008",
+    "access": "Viewer"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "James Gray",
+    "email": "james.gray@example.com",
+    "number": "333-444-5555",
+    "employeeId": "E009",
+    "access": "User"
+  },
+  {
+    "picture": "https://via.placeholder.com/40",
+    "name": "Olivia Purple",
+    "email": "olivia.purple@example.com",
+    "number": "777-666-5555",
+    "employeeId": "E010",
+    "access": "Admin"
+  }
+]

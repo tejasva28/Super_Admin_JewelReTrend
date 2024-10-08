@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "registrar": "JWL123",
+    "name": "Gold Necklace",
+    "phone": "9876543210",
+    "email": "contact@joyalukkas.com",
+    "cost": 50000,
+    "date": "12.Aug.2023",
+    "city": "Mumbai",
+    "pinCode": "400001"
+  },
+  {
+    "id": 2,
+    "registrar": "JWL124",
+    "name": "Diamond Earrings",
+    "phone": "9123456789",
+    "email": "contact@kalyanjewellers.com",
+    "cost": 75000,
+    "date": "05.Jul.2023",
+    "city": "Chennai",
+    "pinCode": "600001"
+  },
+  {
+    "id": 3,
+    "registrar": "JWL125",
+    "name": "Platinum Ring",
+    "phone": "9988776655",
+    "email": "support@tanishq.com",
+    "cost": 65000,
+    "date": "20.Sep.2023",
+    "city": "Bangalore",
+    "pinCode": "560001"
+  },
+  {
+    "id": 4,
+    "registrar": "JWL126",
+    "name": "Silver Bracelet",
+    "phone": "9911223344",
+    "email": "care@malabargold.com",
+    "cost": 30000,
+    "date": "15.Oct.2023",
+    "city": "Kolkata",
+    "pinCode": "700001"
+  },
+  {
+    "id": 5,
+    "registrar": "JWL127",
+    "name": "Ruby Pendant",
+    "phone": "9876543212",
+    "email": "info@tribhovandasbhimji.com",
+    "cost": 45000,
+    "date": "08.Jun.2023",
+    "city": "Surat",
+    "pinCode": "395003"
+  },
+  {
+    "id": 6,
+    "registrar": "JWL128",
+    "name": "Emerald Ring",
+    "phone": "9876543213",
+    "email": "sales@amrapalijewels.com",
+    "cost": 55000,
+    "date": "25.Jul.2023",
+    "city": "Jaipur",
+    "pinCode": "302001"
+  },
+  {
+    "id": 7,
+    "registrar": "JWL129",
+    "name": "Kundan Bangle Set",
+    "phone": "9865432109",
+    "email": "service@sencogold.com",
+    "cost": 40000,
+    "date": "10.Dec.2023",
+    "city": "Delhi",
+    "pinCode": "110001"
+  },
+  {
+    "id": 8,
+    "registrar": "JWL130",
+    "name": "Sapphire Necklace",
+    "phone": "9123456781",
+    "email": "customercare@pcjeweller.com",
+    "cost": 85000,
+    "date": "30.Nov.2023",
+    "city": "Hyderabad",
+    "pinCode": "500001"
+  },
+  {
+    "id": 9,
+    "registrar": "JWL131",
+    "name": "Antique Gold Choker",
+    "phone": "9876541230",
+    "email": "support@bhimajewellers.com",
+    "cost": 95000,
+    "date": "18.Mar.2023",
+    "city": "Ahmedabad",
+    "pinCode": "380001"
+  },
+  {
+    "id": 10,
+    "registrar": "JWL132",
+    "name": "Pearl Earrings",
+    "phone": "9123456700",
+    "email": "info@raniwala1881.com",
+    "cost": 35000,
+    "date": "28.Feb.2023",
+    "city": "Pune",
+    "pinCode": "411001"
+  },
+  {
+    "id": 11,
+    "registrar": "JWL133",
+    "name": "Navratna Ring",
+    "phone": "9876543209",
+    "email": "inquiry@khazanajewellery.com",
+    "cost": 25000,
+    "date": "09.Jan.2023",
+    "city": "Lucknow",
+    "pinCode": "226001"
+  },
+  {
+    "id": 12,
+    "registrar": "JWL134",
+    "name": "Diamond Studs",
+    "phone": "9876543244",
+    "email": "help@kotharijewellers.com",
+    "cost": 70000,
+    "date": "12.Dec.2023",
+    "city": "Indore",
+    "pinCode": "452001"
+  }
+]

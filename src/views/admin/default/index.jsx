@@ -17,6 +17,7 @@ import Usa from "assets/img/dashboards/usa.png";
 import MiniCalendar from "components/calendar/MiniCalendar";
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from "components/icons/IconBox";
+import tableDataCheck from "views/admin/Sales/variables/tableDataCheck.json";
 import React from "react";
 import {
   MdAddTask,
@@ -24,8 +25,8 @@ import {
   MdBarChart,
   MdFileCopy,
 } from "react-icons/md";
-import CheckTable from "views/admin/default/components/CheckTable";
-import SalesTable from "views/admin/dataTables/components/DevelopmentTable";
+import CurrentStocks from "views/admin/Sales/components/CurrentStocks";
+import SalesTable from "views/admin/Sales/components/DevelopmentTable";
 import DailyTraffic from "views/admin/default/components/DailyTraffic";
 import PieCard from "views/admin/default/components/PieCard";
 import Tasks from "views/admin/default/components/Tasks";
@@ -35,8 +36,10 @@ import {
   columnsDataCheck,
   columnsDataComplex,
 } from "views/admin/default/variables/columnsData";
-import tableDataCheck from "views/admin/default/variables/tableDataCheck.json";
-import tableDataDevelopment from "views/admin/dataTables/variables/tableDataDevelopment.json";
+import tableDataDevelopment from "views/admin/Sales/variables/tableDataDevelopment.json";
+import { FcWorkflow } from "react-icons/fc";
+import { RiMoneyDollarBoxFill } from "react-icons/ri";
+import { FaList } from "react-icons/fa";
 
 // Render Component
 export default function Dashboard() {
@@ -90,32 +93,31 @@ export default function Dashboard() {
               h="56px"
               bg={boxBg}
               icon={
-                <Icon w="32px" h="32px" as={MdAttachMoney} color={brandColor} />
+                <Icon w="32px" h="32px" as={FaList} color={brandColor} />
               }
             />
           }
           name="Total SKU's"
           value="59"
         />
-        <MiniStatistics growth="+23%" name="Sales" value="INR 50,000,00" />
+        <MiniStatistics 
+        startContent={
+          <IconBox
+            w="56px"
+            h="56px"
+            bg={boxBg}
+            icon={<Icon w="32px" h="32px" as={RiMoneyDollarBoxFill} color={brandColor} />}
+          />
+        }
+        growth="+23%" name="Sales" value="INR 50,000,00" />
         <MiniStatistics
-          endContent={
-            <Flex me="-16px" mt="10px">
-              <FormLabel htmlFor="balance">
-                <Avatar src={Usa} />
-              </FormLabel>
-              <Select
-                id="balance"
-                variant="mini"
-                mt="5px"
-                me="0px"
-                defaultValue="INR"
-              >
-                <option value="usd">INR</option>
-                <option value="eur">USD</option>
-                <option value="gba">GBA</option>
-              </Select>
-            </Flex>
+          startContent={
+            <IconBox
+              w="56px"
+              h="56px"
+              bg={boxBg}
+              icon={<Icon w="32px" h="32px" as={FcWorkflow} color={brandColor} />}
+            />
           }
           name="Appraisers"
           value="25"
@@ -171,21 +173,26 @@ export default function Dashboard() {
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
+        <CurrentStocks 
+        columnsData={columnsDataCheck} 
+        tableData={tableDataCheck.slice(0, 4)} 
+        desiredAttributes={["name", "seller", "quantity", "date"]}
+        />
+
         <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
           <DailyTraffic />
-          <PieCard />
+          {/* <PieCard /> */}
         </SimpleGrid>
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
         {/* Corrected SalesTable Usage */}
         <SalesTable
-          tableData={tableDataDevelopment} // Correct table data
+          tableData={tableDataDevelopment.slice(0, 6)} // Correct table data
           desiredAttributes={["id", "name", "cost", "date"]} // Specify which columns to show
         />
         <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <Tasks />
+          {/* <Tasks /> */}
           <MiniCalendar h="100%" minW="100%" selectRange={false} />
         </SimpleGrid>
       </SimpleGrid>

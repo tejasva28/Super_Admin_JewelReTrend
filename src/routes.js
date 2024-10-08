@@ -12,14 +12,16 @@ import {
 import MainDashboard from 'views/admin/default';
 import NFTMarketplace from 'views/admin/marketplace';
 import Profile from 'views/admin/profile';
-import DataTables from 'views/admin/dataTables';
-import RTL from 'views/admin/rtl';
+import Sales from 'views/admin/Sales';
+import Team from 'views/admin/team';
 import ProductDetails from 'views/admin/products/ProductDetails';
 import AppraisedDetails from './views/admin/products/AppraisedDetails';
 import Products from 'views/admin/products';
+import AppraiserTable from 'views/admin/team/components/AppraiserTable';
 
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
+import SellerDetails from 'views/admin/marketplace/sellerDetails';
 
 const routes = [
   {
@@ -45,6 +47,7 @@ const routes = [
     component: <Products />,
     secondary: true,
   },
+  
   {
     name: 'Product Details',
     layout: '/admin',
@@ -52,12 +55,20 @@ const routes = [
     component: <ProductDetails />,
     sidebar: false, // Ensure this is set to false
   },
+
+
   {
     name: 'Appraised Data',
     layout: '/admin',
     path: '/products/appraised/:id',
     component: <AppraisedDetails />,
   },
+  // {
+  //   name: 'Sellers Data',
+  //   layout: '/admin',
+  //   path: '/products/sellers/:id',
+  //   component: <SellerDetails />,
+  // },
   {
     name: 'Sellers',
     layout: '/admin',
@@ -78,23 +89,42 @@ const routes = [
     layout: '/admin',
     icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
     path: '/data-tables',
-    component: <DataTables />,
+    component: <Sales />,
     sidebar: false,
+    secondary: true,
   },
   {
-    name: 'Profile',
+    name: 'Team',
     layout: '/admin',
-    path: '/profile',
-    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-    component: <Profile />,
+    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
+    path: '/team',
+    component: <Team />,
+    sidebar: false,
+    secondary: true,
   },
-  {
-    name: 'Sign In',
-    layout: '/auth',
-    path: '/sign-in',
-    icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
-    component: <SignInCentered />,
-  },
+  // {
+  //   name: 'Appraisers',
+  //   layout: '/admin',
+  //   path: '/Appraiser/:id',
+  //   component: <AppraisedDetails />,
+  //   sidebar: false, // Ensure this is set to false
+  // },
+  
+  // {
+  //   name: 'Profile',
+  //   layout: '/admin',
+  //   path: '/profile',
+  //   icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
+  //   component: <Profile />,
+  // },
+  
+  // {
+  //   name: 'Sign In',
+  //   layout: '/auth',
+  //   path: '/sign-in',
+  //   icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
+  //   component: <SignInCentered />,
+  // },
   
 ];
 

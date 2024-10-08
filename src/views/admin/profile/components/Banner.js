@@ -1,10 +1,10 @@
-// Chakra imports
 import { Avatar, Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Card from "components/card/Card.js";
 import React from "react";
 
 export default function Banner(props) {
   const { banner, avatar, name, job, posts, followers, following } = props;
+
   // Chakra Color Mode
   const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
   const textColorSecondary = "gray.400";
@@ -12,52 +12,71 @@ export default function Banner(props) {
     "white !important",
     "#111C44 !important"
   );
+
   return (
-    <Card mb={{ base: "0px", lg: "20px" }} align='center'>
+    <Card
+      mb={{ base: "0px", lg: "20px" }}
+      align="center"
+      w="100%"
+      maxW="100%"
+      mx="auto"
+      p="0"
+      overflow="hidden"
+    >
+      {/* Banner Background */}
       <Box
         bg={`url(${banner})`}
-        bgSize='cover'
-        borderRadius='16px'
-        h='131px'
-        w='100%'
+        bgSize="cover"
+        bgPosition="center"
+        borderRadius="16px 16px 0 0"
+        h="180px"
+        w="100%"
       />
+
+      {/* Avatar - Centered */}
       <Avatar
-        mx='auto'
+        mx="auto"
         src={avatar}
-        h='87px'
-        w='87px'
-        mt='-43px'
-        border='4px solid'
+        h="87px"
+        w="87px"
+        mt="-43px"
+        border="4px solid"
         borderColor={borderColor}
+        zIndex="1"
+        position="relative"
       />
-      <Text color={textColorPrimary} fontWeight='bold' fontSize='xl' mt='10px'>
+
+      {/* Name and Job */}
+      <Text color={textColorPrimary} fontWeight="bold" fontSize="xl" mt="10px">
         {name}
       </Text>
-      <Text color={textColorSecondary} fontSize='sm'>
+      <Text color={textColorSecondary} fontSize="sm">
         {job}
       </Text>
-      <Flex w='max-content' mx='auto' mt='26px'>
-        <Flex mx='auto' me='60px' align='center' direction='column'>
-          <Text color={textColorPrimary} fontSize='2xl' fontWeight='700'>
+
+      {/* Stats (Posts, Followers, Following) */}
+      <Flex justify="space-around" w="100%" mt="26px" px="20px">
+        <Flex align="center" direction="column">
+          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700">
             {posts}
           </Text>
-          <Text color={textColorSecondary} fontSize='sm' fontWeight='400'>
+          <Text color={textColorSecondary} fontSize="sm" fontWeight="400">
             Posts
           </Text>
         </Flex>
-        <Flex mx='auto' me='60px' align='center' direction='column'>
-          <Text color={textColorPrimary} fontSize='2xl' fontWeight='700'>
+        <Flex align="center" direction="column">
+          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700">
             {followers}
           </Text>
-          <Text color={textColorSecondary} fontSize='sm' fontWeight='400'>
+          <Text color={textColorSecondary} fontSize="sm" fontWeight="400">
             Followers
           </Text>
         </Flex>
-        <Flex mx='auto' align='center' direction='column'>
-          <Text color={textColorPrimary} fontSize='2xl' fontWeight='700'>
+        <Flex align="center" direction="column">
+          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700">
             {following}
           </Text>
-          <Text color={textColorSecondary} fontSize='sm' fontWeight='400'>
+          <Text color={textColorSecondary} fontSize="sm" fontWeight="400">
             Following
           </Text>
         </Flex>

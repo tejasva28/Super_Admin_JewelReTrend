@@ -11,6 +11,9 @@ import {
 import initialTheme from './theme/theme'; //  { themeGreen }
 import { useState } from 'react';
 import AppraisedDetails from './views/admin/products/AppraisedDetails';
+import SellerDetails from 'views/admin/marketplace/sellerDetails';
+import AppraiserDetails from './views/admin/team/AppraiserDetails';
+import PhotographerDetails from './views/admin/team/PhotographerDetails';
 
 // Chakra imports
 
@@ -41,6 +44,11 @@ export default function Main() {
           }
         />
         <Route path="/appraised/:id" element={<AppraisedDetails />} />
+        <Route path="/seller/:id"  element={<SellerDetails theme={currentTheme} setTheme={setCurrentTheme}/>} />
+        <Route path="/appraiser/:id" element={<AppraiserDetails />} />
+        <Route path="/photographer/:id" element={<PhotographerDetails />} />
+        <Route path="/team*"
+        element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
 
         <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>

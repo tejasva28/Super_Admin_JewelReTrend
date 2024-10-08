@@ -55,7 +55,8 @@ export function SidebarLinks(props) {
         && 
         (
           route.name != "Product Details" &&
-          route.name != "Appraised Data" 
+          route.name != "Appraised Data" &&
+          route.name != "Seller Data"
         )
       ) {
         return (

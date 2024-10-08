@@ -182,6 +182,9 @@ export default function Products() {
           >
             Top Products
           </Text>
+          <SimpleGrid columns={{ base: 1, md: 4 }} gap="20px">
+          {productCards}
+          </SimpleGrid>
           {/* <SimpleGrid
             columns={{ base: 1, md: 4 }}
             gap="20px"

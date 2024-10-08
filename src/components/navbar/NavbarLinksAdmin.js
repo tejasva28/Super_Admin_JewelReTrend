@@ -18,6 +18,7 @@ import {
 import { ItemContent } from 'components/menu/ItemContent';
 import { SearchBar } from 'components/navbar/searchBar/SearchBar';
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
+import profile from 'views/admin/profile';
 import PropTypes from 'prop-types';
 import React from 'react';
 // Assets
@@ -54,7 +55,7 @@ export default function HeaderLinks(props) {
       borderRadius="30px"
       boxShadow={shadow}
     >
-      <SearchBar
+      {/* <SearchBar
         mb={() => {
           if (secondary) {
             return { base: '10px', md: 'unset' };
@@ -63,8 +64,8 @@ export default function HeaderLinks(props) {
         }}
         me="10px"
         borderRadius="30px"
-      />
-      <Flex
+      /> */}
+      {/* <Flex
         bg={ethBg}
         display={secondary ? 'flex' : 'none'}
         borderRadius="30px"
@@ -72,7 +73,7 @@ export default function HeaderLinks(props) {
         p="6px"
         align="center"
         me="6px"
-      >
+      > */}
         <Flex
           align="center"
           justify="center"
@@ -97,7 +98,7 @@ export default function HeaderLinks(props) {
             ETH
           </Text>
         </Text> */}
-      </Flex>
+      {/* </Flex> */}
       <SidebarResponsive routes={routes} />
       <Menu>
         <MenuButton p="0px">
@@ -270,26 +271,18 @@ export default function HeaderLinks(props) {
               fontWeight="700"
               color={textColor}
             >
-              👋&nbsp; Hey, Adela
+              👋&nbsp; Tejasva
             </Text>
           </Flex>
           <Flex flexDirection="column" p="10px">
-            <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              borderRadius="8px"
-              px="14px"
-            >
-              <Text fontSize="sm">Profile Settings</Text>
-            </MenuItem>
-            <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              borderRadius="8px"
-              px="14px"
-            >
-              <Text fontSize="sm">Newsletter Settings</Text>
-            </MenuItem>
+          <MenuItem
+          _hover={{ bg: 'none' }}
+          _focus={{ bg: 'none' }}
+          borderRadius="8px"
+          px="14px"
+          onClick={profile} // Attach the profile method to onClick
+        >
+        </MenuItem>
             <MenuItem
               _hover={{ bg: 'none' }}
               _focus={{ bg: 'none' }}
