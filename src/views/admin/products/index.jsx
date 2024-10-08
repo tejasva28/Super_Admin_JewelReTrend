@@ -22,6 +22,7 @@ import allProducts from "../products/variables/products";
 
 // Custom components
 import ProductCard from "components/card/Product_card";
+import topProducts from "./variables/topProducts";
 import Card from "components/card/Card.js";
 
 // Assets
@@ -74,6 +75,16 @@ export default function Products() {
     />
   ));
 
+  const product_Cards = topProducts.map((product, index) => (
+    <ProductCard
+      key={index}
+      productName={product.name}
+      seller={product.sellerName}
+      image={product.image}
+      currentPrice={product.price}
+      productId={product.id}
+    />
+  ));
   console.log('unapprovedProducts:', unapprovedProducts);
 
   return (
@@ -183,7 +194,7 @@ export default function Products() {
             Top Products
           </Text>
           <SimpleGrid columns={{ base: 1, md: 4 }} gap="20px">
-          {productCards}
+          {product_Cards}
           </SimpleGrid>
           {/* <SimpleGrid
             columns={{ base: 1, md: 4 }}

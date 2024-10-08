@@ -10,9 +10,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from 'react';
-
-// Assets
-import Usa from "assets/img/dashboards/usa.png";
 // Custom components
 import MiniCalendar from "components/calendar/MiniCalendar";
 import MiniStatistics from "components/card/MiniStatistics";
@@ -179,23 +176,20 @@ export default function Dashboard() {
         desiredAttributes={["name", "seller", "quantity", "date"]}
         />
 
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
           <DailyTraffic />
           {/* <PieCard /> */}
-        </SimpleGrid>
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
         {/* Corrected SalesTable Usage */}
         <SalesTable
-          tableData={tableDataDevelopment.slice(0, 6)} // Correct table data
+          tableData={tableDataDevelopment.slice(0, 4)} // Correct table data
           desiredAttributes={["id", "name", "cost", "date"]} // Specify which columns to show
         />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
+        {/* <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px"> */}
           {/* <Tasks /> */}
-          <MiniCalendar h="100%" minW="100%" selectRange={false} />
+          <MiniCalendar h="200%" minW="100%" selectRange={false} />
         </SimpleGrid>
-      </SimpleGrid>
     </Box>
   );
 }

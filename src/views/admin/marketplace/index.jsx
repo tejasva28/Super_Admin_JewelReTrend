@@ -31,7 +31,8 @@ export default function Marketplace() {
       {/* Sellers Table */}
       <Card>
         <Box overflowX="auto">
-          <Table variant="simple">
+          <Table variant="simple" fontSize="16px">
+
             <Thead bg={tableHeaderBg}>
               <Tr>
                 <Th p={4}>

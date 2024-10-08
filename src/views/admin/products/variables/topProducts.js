@@ -1,0 +1,48 @@
+const topProducts = [
+  {
+    id: 1,
+    name: "Emerald Choker",
+    image: "https://www.rarecarat.com/static/5e387f42a27fd1fa4031ff26/purple-emerald-necklace-hero.jpg", 
+    price: 60000,
+    status: "pending",
+    category: "Choker",
+    sellerName: "PC Jewellers",
+    appraiser: "Alice Smith",
+    approved: false,
+  },
+  {
+    id: 2,
+    name: "Ruby Stud Earrings",
+    image: "https://images-na.ssl-images-amazon.com/images/I/71rJGGBk4oL._UL1500_.jpg",
+    price: 85000,
+    status: "pending",
+    category: "Earrings",
+    sellerName: "Kalyan Jewellers",
+    appraiser: "Bob Johnson",
+    approved: false,
+  },
+  {
+    id: 3,
+    name: "Pearl Bracelet",
+    image: "https://cdn.shopify.com/s/files/1/0425/7177/4084/products/pearl-bracelet-beaded-bracelet-natural-stone-bracelet-layered-372365_f7e24a9e-484b-44ec-a705-90c77a8b2a71_1024x1024@2x.jpg?v=1620935045",
+    price: 40000,
+    status: "pending",
+    category: "Bracelet",
+    sellerName: "Tanishq",
+    appraiser: "Carol White",
+    approved: false,
+  },
+  {
+    id: 4,
+    name: "Gold Anklet",
+    image: "https://cdn.caratlane.com/media/catalog/product/J/R/JR01801-YGP600_3_lar.jpg",
+    price: 25000,
+    status: "pending",
+    category: "Anklet",
+    sellerName: "Bhima Jewellers",
+    appraiser: "David Black",
+    approved: false,
+  },
+];
+
+export default topProducts;
