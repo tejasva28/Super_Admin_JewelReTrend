@@ -26,6 +26,7 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -33,13 +34,32 @@ import {
 import Card from 'components/card/Card';
 import Menu from 'components/menu/MainMenu';
 
+// Define the column helper
 const columnHelper = createColumnHelper();
 
+// Default Column Filter Component
+function DefaultColumnFilter({
+  column: { filterValue, setFilter },
+}) {
+  return (
+    <Input
+      value={filterValue || ''}
+      onChange={(e) => setFilter(e.target.value || undefined)}
+      placeholder={`Search...`}
+      size="sm"
+    />
+  );
+}
+
+// Main Table Component
 export default function CheckTable(props) {
   const { tableData } = props;
   const [sorting, setSorting] = React.useState([]);
   const [data, setData] = React.useState(() => [...tableData]); // State to hold table data
   const [editRowId, setEditRowId] = React.useState(null); // ID of the row being edited
+
+  const [globalFilter, setGlobalFilter] = React.useState('');
+  const [columnFilters, setColumnFilters] = React.useState([]);
 
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
@@ -81,6 +101,23 @@ export default function CheckTable(props) {
     setData((prevData) => prevData.filter((row) => row.employeeId !== id));
   };
 
+  // Function to return background color based on access level
+  const getAccessColor = (accessLevel) => {
+    switch (accessLevel) {
+      case 'Admin':
+        return 'red.400';
+      case 'Manager':
+        return 'blue.400';
+      case 'Operations':
+        return 'green.400';
+      case 'Accounts':
+        return 'yellow.400';
+      default:
+        return 'gray.400';
+    }
+  };
+
+  // Define columns with filters
   const columns = [
     // Name column with picture and editable input
     columnHelper.accessor('name', {
@@ -117,6 +154,8 @@ export default function CheckTable(props) {
           </Flex>
         );
       },
+      enableColumnFilter: true,
+      filterFn: 'includesString',
     }),
     // Email column with editable input
     columnHelper.accessor('email', {
@@ -144,6 +183,8 @@ export default function CheckTable(props) {
           </Text>
         );
       },
+      enableColumnFilter: true,
+      filterFn: 'includesString',
     }),
     // Number column with editable input
     columnHelper.accessor('number', {
@@ -171,6 +212,8 @@ export default function CheckTable(props) {
           </Text>
         );
       },
+      enableColumnFilter: true,
+      filterFn: 'includesString',
     }),
     // Employee ID column (non-editable)
     columnHelper.accessor('employeeId', {
@@ -190,6 +233,8 @@ export default function CheckTable(props) {
           {info.getValue()}
         </Text>
       ),
+      enableColumnFilter: true,
+      filterFn: 'includesString',
     }),
     // Access column with editable dropdown
     columnHelper.accessor('access', {
@@ -207,7 +252,7 @@ export default function CheckTable(props) {
       cell: (info) => {
         const row = info.row.original;
         const accessLevel = row.access;
-
+  
         return editRowId === row.employeeId ? (
           <Select
             value={accessLevel}
@@ -230,6 +275,8 @@ export default function CheckTable(props) {
           </Text>
         );
       },
+      enableColumnFilter: true,
+      filterFn: 'includesString',
     }),
     // Actions column (Edit & Delete)
     columnHelper.accessor('actions', {
@@ -246,7 +293,7 @@ export default function CheckTable(props) {
       ),
       cell: (info) => {
         const row = info.row.original;
-
+  
         return (
           <Flex justify="center" align="center">
             {editRowId === row.employeeId ? (
@@ -280,34 +327,25 @@ export default function CheckTable(props) {
           </Flex>
         );
       },
+      enableColumnFilter: false, // No filter for actions
     }),
   ];
 
-  // Function to return background color based on access level
-  const getAccessColor = (accessLevel) => {
-    switch (accessLevel) {
-      case 'Admin':
-        return 'red.400';
-      case 'Manager':
-        return 'blue.400';
-      case 'Operations':
-        return 'green.400';
-      case 'Accounts':
-        return 'yellow.400';
-      default:
-        return 'gray.400';
-    }
-  };
-
+  // Initialize React Table
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
+      globalFilter,
+      columnFilters,
     },
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
   });
 
@@ -321,7 +359,22 @@ export default function CheckTable(props) {
       <Flex px="25px" mb="8px" justifyContent="space-between" align="center">
         <Menu />
       </Flex>
-      <Box>
+      
+      {/* Global Filter */}
+      <Flex justify="space-between" align="center" mb="4" px="25px">
+        <Text fontSize="lg" fontWeight="bold">
+          Employee Records
+        </Text>
+        <Input
+          placeholder="Search all columns..."
+          value={globalFilter ?? ''}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          w="300px"
+        />
+      </Flex>
+
+      {/* Table Filters */}
+      <Box px="25px" mb="4">
         <Table variant="striped" colorScheme="gray" mb="24px" mt="12px">
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -352,6 +405,12 @@ export default function CheckTable(props) {
                           none: <Icon as={FaSort} />,
                         }[header.column.getIsSorted() || 'none']}
                       </Flex>
+                      {/* Column Filter */}
+                      {header.column.getCanFilter() ? (
+                        <Box mt="2">
+                          <DefaultColumnFilter column={header.column} />
+                        </Box>
+                      ) : null}
                     </Th>
                   );
                 })}
@@ -359,29 +418,27 @@ export default function CheckTable(props) {
             ))}
           </Thead>
           <Tbody>
-            {table
-              .getRowModel()
-              .rows.map((row, idx) => {
-                return (
-                  <Tr key={row.id} _hover={{ bgColor: rowHoverBg }} bg={idx % 2 === 0 ? stripedBg : ''}>
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <Td
-                          key={cell.id}
-                          fontSize={{ sm: '14px' }}
-                          minW={{ sm: '150px', md: '200px', lg: 'auto' }}
-                          borderColor="transparent"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </Td>
-                      );
-                    })}
-                  </Tr>
-                );
-              })}
+            {table.getRowModel().rows.map((row, idx) => {
+              return (
+                <Tr key={row.id} _hover={{ bgColor: rowHoverBg }} bg={idx % 2 === 0 ? stripedBg : ''}>
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <Td
+                        key={cell.id}
+                        fontSize={{ sm: '14px' }}
+                        minW={{ sm: '150px', md: '200px', lg: 'auto' }}
+                        borderColor="transparent"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </Box>

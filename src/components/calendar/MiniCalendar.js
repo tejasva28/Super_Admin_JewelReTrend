@@ -20,6 +20,7 @@ import {
   Input,
   Textarea,
   Stack,
+  useTheme, // Import useTheme
 } from '@chakra-ui/react';
 import {
   ChevronLeftIcon,
@@ -40,6 +41,8 @@ import {
 } from 'date-fns';
 
 function MiniCalendar({ initialEvents = [] }) {
+  const theme = useTheme(); // Access the theme
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState(initialEvents);
@@ -51,12 +54,20 @@ function MiniCalendar({ initialEvents = [] }) {
     description: '',
   });
 
-  const bg = useColorModeValue('white', 'gray.700');
+  // Use theme colors
+  const bg = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue('gray.800', 'white');
-  const eventBg = useColorModeValue('blue.500', 'blue.300');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const hoverBg = useColorModeValue('gray.100', 'gray.700');
+  const modalBg = useColorModeValue('white', 'gray.800');
+
+  // Access theme's primary color (adjust 'brand' to your theme's color key)
+  const primaryColor = theme.colors.brand ? 'brand' : 'blue';
+
+  // Event colors using theme's primary color
+  const eventBg = useColorModeValue(`${primaryColor}.500`, `${primaryColor}.300`);
   const eventTextColor = useColorModeValue('white', 'gray.800');
-  const todayBg = useColorModeValue('blue.100', 'blue.900');
-  const hoverBg = useColorModeValue('gray.100', 'gray.600');
+  const todayBg = useColorModeValue(`${primaryColor}.100`, `${primaryColor}.900`);
 
   // Navigate to previous month
   const prevMonth = () => {
@@ -170,12 +181,13 @@ function MiniCalendar({ initialEvents = [] }) {
             key={day.toString()}
             p={2}
             borderWidth="1px"
-            borderColor="gray.200"
+            borderColor={borderColor}
             bg={isSameDay(day, new Date()) ? todayBg : 'transparent'}
-            color={isSameMonth(day, monthStart) ? textColor : 'gray.400'}
+            color={isSameMonth(day, monthStart) ? textColor : 'gray.500'}
             cursor="pointer"
             _hover={{ bg: hoverBg }}
             onClick={() => onDateClick(cloneDay)}
+            minH="80px"
           >
             <Flex direction="column" h="100%">
               <Text fontSize="sm" mb={1}>
@@ -186,8 +198,8 @@ function MiniCalendar({ initialEvents = [] }) {
                   key={index}
                   bg={eventBg}
                   color={eventTextColor}
-                  px={3}
-                  py={2}
+                  px={2}
+                  py={1}
                   borderRadius="md"
                   mb={1}
                   fontSize="xs"
@@ -217,7 +229,7 @@ function MiniCalendar({ initialEvents = [] }) {
   };
 
   return (
-    <Box bg={bg} p={6} borderRadius="lg">
+    <Box bg={bg} p={6} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
       {renderHeader()}
       {renderDays()}
       {renderCells()}
@@ -229,14 +241,14 @@ function MiniCalendar({ initialEvents = [] }) {
         size="md"
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={modalBg}>
           <ModalHeader>
             {selectedDate
               ? format(selectedDate, 'do MMMM yyyy')
               : 'Select a Date'}
             <Button
               leftIcon={<AddIcon />}
-              colorScheme="blue"
+              colorScheme={primaryColor}
               variant="solid"
               size="sm"
               ml={4}
@@ -278,7 +290,7 @@ function MiniCalendar({ initialEvents = [] }) {
         size="md"
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={modalBg}>
           <ModalHeader>Add New Event</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -298,7 +310,7 @@ function MiniCalendar({ initialEvents = [] }) {
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSaveEvent}>
+            <Button colorScheme={primaryColor} mr={3} onClick={handleSaveEvent}>
               Save
             </Button>
             <Button onClick={() => setIsNewEventModalOpen(false)}>

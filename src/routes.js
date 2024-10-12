@@ -25,6 +25,7 @@ import Products from 'views/admin/products';
 import AppraiserTable from 'views/admin/team/components/AppraiserTable';
 import CalendarPage from '/Users/tejasva/Downloads/horizon-ui-chakra-main/src/views/admin/calendar'; // Import the CalendarPage component
 import SessionsPage from 'views/admin/sessions/index'; 
+import Insurace from '/Users/tejasva/Downloads/horizon-ui-chakra-main/src/views/insurance';
 
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
@@ -64,6 +65,14 @@ const routes = [
     component: <Products />,
     sidebar: true, // Show in the sidebar
     secondary: true,
+  },
+  {
+    name: 'Insurance',
+    layout: '/admin',
+    path: '/insurace',
+    icon: <Icon as={GoDeviceMobile} width="20px" height="20px" color="inherit" />,
+    component: <Insurace />,
+    sidebar: true,
   },
   {
     name: 'Product Details',

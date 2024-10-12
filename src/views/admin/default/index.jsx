@@ -183,7 +183,7 @@ export default function Dashboard() {
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
         {/* Corrected SalesTable Usage */}
         <SalesTable
-          tableData={tableDataDevelopment.slice(0, 4)} // Correct table data
+          tableData={tableDataDevelopment.slice(0, 8)} // Correct table data
           desiredAttributes={["id", "name", "cost", "date"]} // Specify which columns to show
         />
         {/* <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px"> */}

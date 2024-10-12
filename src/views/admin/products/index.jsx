@@ -75,7 +75,7 @@ export default function Products() {
     />
   ));
 
-  const product_Cards = topProducts.map((product, index) => (
+  const ProductCards = topProducts.map((product, index) => (
     <ProductCard
       key={index}
       productName={product.name}
@@ -194,7 +194,7 @@ export default function Products() {
             Top Products
           </Text>
           <SimpleGrid columns={{ base: 1, md: 4 }} gap="20px">
-          {product_Cards}
+          {ProductCards}
           </SimpleGrid>
           {/* <SimpleGrid
             columns={{ base: 1, md: 4 }}

@@ -16,6 +16,8 @@ import AppraiserDetails from './views/admin/team/AppraiserDetails';
 import PhotographerDetails from './views/admin/team/PhotographerDetails';
 import CalendarPage from 'views/admin/calendar';
 import SessionsPage from 'views/admin/sessions/index'; // Import the SessionsPage component
+import DisbursedDetails from 'views/insurance/DisbursedDetails';
+import TransitDetails from 'views/insurance/TransitDetails';
 
 export default function Main() {
   // eslint-disable-next-line
@@ -53,6 +55,8 @@ export default function Main() {
         <Route path="/appraiser/:id" element={<AppraiserDetails />} />
         <Route path="/photographer/:id" element={<PhotographerDetails />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/disbursed-details/:id" element={<DisbursedDetails />} />
+        <Route path="/transit-details/:transitID" element={<TransitDetails />} />
         <Route
           path="/sessions"
           element={

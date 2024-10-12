@@ -21,7 +21,7 @@ function CalendarPage() {
   ];
 
   // Use the hook at the top level
-  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const bgColor = useColorModeValue('gray.100', 'gray.700');
 
   // Filter events to include only today's and future events
   const today = new Date();
@@ -32,7 +32,7 @@ function CalendarPage() {
 
   return (
     <>
-      <Box p={8} borderRadius="lg" maxW="container.xl" mx="auto" mt={10}>
+      <Box p={8} borderRadius="lg" maxW="container.xl" mx="auto" mt={10} bg={bgColor}>
         {/* MiniCalendar Component */}
         <MiniCalendar initialEvents={events} />
 

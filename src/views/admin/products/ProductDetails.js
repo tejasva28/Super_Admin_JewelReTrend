@@ -9,10 +9,11 @@ import {
   Stack,
   Divider,
   Grid,
-  Badge,
-  Button,
   Select,
   Flex,
+  Input,
+  Textarea,
+  Button,
 } from '@chakra-ui/react';
 import allProducts from '../products/variables/products'; // Adjust the import path
 
@@ -22,8 +23,12 @@ export default function ProductDetails() {
   const productId = parseInt(id, 10);
   const product = allProducts.find((p) => p.id === productId);
 
-  // State to manage the status
+  // State to manage the status and edit mode
   const [status, setStatus] = useState(product?.status || 'pending');
+  const [isEditing, setIsEditing] = useState(false);
+
+  // State to hold edited product details
+  const [editedProduct, setEditedProduct] = useState({ ...product });
 
   // Function to get color based on status
   const getStatusColor = (status) => {
@@ -49,29 +54,100 @@ export default function ProductDetails() {
     );
   }
 
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle Save
+  const handleSave = () => {
+    // TODO: Implement save logic (e.g., API call)
+    // For now, we'll just log the edited product
+    console.log('Saved product:', editedProduct);
+
+    // Update the main product object
+    Object.assign(product, editedProduct);
+
+    setIsEditing(false);
+  };
+
+  // Handle Cancel
+  const handleCancel = () => {
+    // Revert changes
+    setEditedProduct({ ...product });
+    setIsEditing(false);
+  };
+
   // Render product details
   return (
     <Container maxW="container.lg" py="6" pt="24">
       <Stack spacing="6">
-        {/* Header with product name and Edit button */}
+        {/* Header with product name and Edit/Save/Cancel buttons */}
         <Flex justifyContent="space-between" alignItems="center">
-          <Heading as="h1" size="xl">
-            {product.name}
-          </Heading>
-          <Button colorScheme="blue" onClick={() => navigate(`/edit/${product.id}`)}>
-            Edit
-          </Button>
+          {isEditing ? (
+            <Input
+              name="name"
+              value={editedProduct.name}
+              onChange={handleInputChange}
+              fontSize="2xl"
+              fontWeight="bold"
+              maxW="400px"
+            />
+          ) : (
+            <Heading as="h1" size="xl">
+              {product.name}
+            </Heading>
+          )}
+          <Flex>
+            {isEditing ? (
+              <>
+                <Button colorScheme="green" mr={2} onClick={handleSave}>
+                  Save
+                </Button>
+                <Button colorScheme="red" onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <Button colorScheme="blue" onClick={() => setIsEditing(true)}>
+                Edit
+              </Button>
+            )}
+          </Flex>
         </Flex>
 
         {/* Product Image */}
         <Box display="flex" justifyContent="center">
-          <Image
-            src={product.image}
-            alt={product.name}
-            maxW="400px"
-            borderRadius="md"
-            boxShadow="md"
-          />
+          {isEditing ? (
+            <Box>
+              <Image
+                src={editedProduct.image}
+                alt={editedProduct.name}
+                maxW="400px"
+                borderRadius="md"
+                boxShadow="md"
+              />
+              <Input
+                name="image"
+                value={editedProduct.image}
+                onChange={handleInputChange}
+                mt={2}
+                placeholder="Image URL"
+              />
+            </Box>
+          ) : (
+            <Image
+              src={product.image}
+              alt={product.name}
+              maxW="400px"
+              borderRadius="md"
+              boxShadow="md"
+            />
+          )}
         </Box>
 
         <Divider />
@@ -84,21 +160,79 @@ export default function ProductDetails() {
               General Details
             </Heading>
             <Stack spacing="2">
-              <Text>
-                <strong>SKU ID:</strong> {product.skuId}
-              </Text>
-              <Text>
-                <strong>Category:</strong> {product.category}
-              </Text>
-              <Text>
-                <strong>Weight:</strong> {product.weight}
-              </Text>
-              <Text>
-                <strong>Stock Quantity:</strong> {product.stockQuantity}
-              </Text>
-              <Text>
-                <strong>Last Updated:</strong> {product.lastUpdated}
-              </Text>
+              {isEditing ? (
+                <>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>SKU ID:</strong>
+                    </Text>
+                    <Input
+                      name="skuId"
+                      value={editedProduct.skuId}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Category:</strong>
+                    </Text>
+                    <Input
+                      name="category"
+                      value={editedProduct.category}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Weight:</strong>
+                    </Text>
+                    <Input
+                      name="weight"
+                      value={editedProduct.weight}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Stock Quantity:</strong>
+                    </Text>
+                    <Input
+                      name="stockQuantity"
+                      value={editedProduct.stockQuantity}
+                      onChange={handleInputChange}
+                      type="number"
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Last Updated:</strong>
+                    </Text>
+                    <Input
+                      name="lastUpdated"
+                      value={editedProduct.lastUpdated}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Text>
+                    <strong>SKU ID:</strong> {product.skuId}
+                  </Text>
+                  <Text>
+                    <strong>Category:</strong> {product.category}
+                  </Text>
+                  <Text>
+                    <strong>Weight:</strong> {product.weight}
+                  </Text>
+                  <Text>
+                    <strong>Stock Quantity:</strong> {product.stockQuantity}
+                  </Text>
+                  <Text>
+                    <strong>Last Updated:</strong> {product.lastUpdated}
+                  </Text>
+                </>
+              )}
             </Stack>
           </Box>
 
@@ -108,15 +242,52 @@ export default function ProductDetails() {
               Seller Details
             </Heading>
             <Stack spacing="2">
-              <Text>
-                <strong>Seller Name:</strong> {product.sellerName}
-              </Text>
-              <Text>
-                <strong>Seller Address:</strong> {product.sellerAddress}
-              </Text>
-              <Text>
-                <strong>City:</strong> {product.city}
-              </Text>
+              {isEditing ? (
+                <>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Seller Name:</strong>
+                    </Text>
+                    <Input
+                      name="sellerName"
+                      value={editedProduct.sellerName}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Seller Address:</strong>
+                    </Text>
+                    <Textarea
+                      name="sellerAddress"
+                      value={editedProduct.sellerAddress}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>City:</strong>
+                    </Text>
+                    <Input
+                      name="city"
+                      value={editedProduct.city}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Text>
+                    <strong>Seller Name:</strong> {product.sellerName}
+                  </Text>
+                  <Text>
+                    <strong>Seller Address:</strong> {product.sellerAddress}
+                  </Text>
+                  <Text>
+                    <strong>City:</strong> {product.city}
+                  </Text>
+                </>
+              )}
             </Stack>
           </Box>
 
@@ -126,12 +297,39 @@ export default function ProductDetails() {
               Additional Details
             </Heading>
             <Stack spacing="2">
-              <Text>
-                <strong>Appraiser:</strong> {product.appraiser}
-              </Text>
-              <Text>
-                <strong>Photographer:</strong> {product.photographer}
-              </Text>
+              {isEditing ? (
+                <>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Appraiser:</strong>
+                    </Text>
+                    <Input
+                      name="appraiser"
+                      value={editedProduct.appraiser}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                  <Flex alignItems="center">
+                    <Text flex="0 0 150px">
+                      <strong>Photographer:</strong>
+                    </Text>
+                    <Input
+                      name="photographer"
+                      value={editedProduct.photographer}
+                      onChange={handleInputChange}
+                    />
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Text>
+                    <strong>Appraiser:</strong> {product.appraiser}
+                  </Text>
+                  <Text>
+                    <strong>Photographer:</strong> {product.photographer}
+                  </Text>
+                </>
+              )}
             </Stack>
           </Box>
         </Grid>
@@ -144,32 +342,55 @@ export default function ProductDetails() {
             alignItems="center"
           >
             {/* Status Selector */}
-            <Select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              maxW="200px"
-            //   bg={`${getStatusColor(status)}.100`}
-              borderColor={`${getStatusColor(status)}.500`}
-            //   color="black" // Text color for better visibility
-              _hover={{ bg: `${getStatusColor(status)}.200` }} // Darker on hover
-              _focus={{ borderColor: `${getStatusColor(status)}.300` }} // Focus border color
-              borderRadius="md" // Smooth borders
-            >
-              <option style={{ backgroundColor: '#1A202C', color: 'white' }} value="live">
-                Live
-              </option>
-              <option style={{ backgroundColor: '#1A202C', color: 'white' }} value="pending">
-                Pending
-              </option>
-              <option style={{ backgroundColor: '#1A202C', color: 'white' }} value="rejected">
-                Rejected
-              </option>
-            </Select>
+            {isEditing ? (
+              <Select
+                name="status"
+                value={editedProduct.status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  handleInputChange(e);
+                }}
+                maxW="200px"
+                borderColor={`${getStatusColor(status)}.500`}
+                _hover={{ bg: `${getStatusColor(status)}.200` }}
+                _focus={{ borderColor: `${getStatusColor(status)}.300` }}
+                borderRadius="md"
+              >
+                <option value="live">Live</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+              </Select>
+            ) : (
+              <Text
+                fontSize="lg"
+                fontWeight="bold"
+                color={`${getStatusColor(status)}.500`}
+              >
+                Status: {status}
+              </Text>
+            )}
 
             {/* Price Display */}
-            <Text fontSize="2xl" fontWeight="bold">
-              ${product.price}
-            </Text>
+            {isEditing ? (
+              <Flex alignItems="center">
+                <Text fontSize="2xl" fontWeight="bold" mr={2}>
+                  $
+                </Text>
+                <Input
+                  name="price"
+                  value={editedProduct.price}
+                  onChange={handleInputChange}
+                  type="number"
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  maxW="150px"
+                />
+              </Flex>
+            ) : (
+              <Text fontSize="2xl" fontWeight="bold">
+                ${product.price}
+              </Text>
+            )}
           </Stack>
         </Box>
       </Stack>
