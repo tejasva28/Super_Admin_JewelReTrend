@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -18,17 +18,47 @@ import {
 } from "@chakra-ui/react";
 import { FaCheckCircle, FaTimesCircle, FaSave, FaEdit } from "react-icons/fa";
 import ColumnChart from "../marketplace/components/ColumnChart";
-import sellersData from "../marketplace/variables/sellersData"; // Import seller data
+import sellersData from "./variables/sellersData"; // Import the dummy data
 
 export default function SellerDetails() {
   const { id } = useParams();
-  const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
-  const [sellerDetails, setSellerDetails] = useState(sellersData[id]); // Editable seller data
+  const [isEditing, setIsEditing] = useState(false);
+  const [sellerDetails, setSellerDetails] = useState(null);
+  // const [loading, setLoading] = useState(true); // Optional: Remove loading state if not needed
 
-  // Chakra Color Modes (always call hooks outside conditions)
+  // Add the Chakra Color Mode variables
   const textColor = useColorModeValue("gray.700", "white");
   const bgColor = useColorModeValue("white", "gray.800");
   const boxShadow = useColorModeValue("md", "dark-lg");
+
+  // Fetch seller details from the dummy data
+  useEffect(() => {
+    // Comment out the API call
+    // fetch(`/api/sellers/${id}`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setSellerDetails(data);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching seller details:", error);
+    //     setLoading(false);
+    //   });
+
+    // Use the dummy data instead
+    const seller = sellersData[id]; // 'id' should correspond to the index
+    setSellerDetails(seller);
+    // setLoading(false); // Optional: Remove if not using loading state
+  }, [id]);
+
+  // Optional: Remove loading check if not needed
+  // if (loading) {
+  //   return (
+  //     <Container maxW="container.md" py="6" pt="24">
+  //       <Text fontSize="xl">Loading...</Text>
+  //     </Container>
+  //   );
+  // }
 
   if (!sellerDetails) {
     return (

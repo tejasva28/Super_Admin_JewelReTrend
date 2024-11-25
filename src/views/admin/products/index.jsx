@@ -1,3 +1,5 @@
+// File: src/views/admin/products/Products.js
+
 import React, { useState } from "react";
 import {
   Box,
@@ -16,6 +18,7 @@ import {
   HStack,
   Image,
 } from "@chakra-ui/react";
+import { MdVisibility } from "react-icons/md";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import allProducts from "../products/variables/products";
@@ -24,12 +27,10 @@ import allProducts from "../products/variables/products";
 import ProductCard from "components/card/Product_card";
 import topProducts from "./variables/topProducts";
 import Card from "components/card/Card.js";
+import AddProductSidebar from "./components/AddProductSidebar"; // Import the new SidebarComponent
+import TotalSpent from "./components/TotalSpent";
 
 // Assets
-import Nft1 from "assets/img/nfts/Nft1.png";
-import Nft2 from "assets/img/nfts/Nft2.png";
-import Nft3 from "assets/img/nfts/Nft3.png";
-import Nft4 from "assets/img/nfts/Nft4.png";
 import unapprovedProducts from './variables/unapprovedData';
 
 export default function Products() {
@@ -87,6 +88,12 @@ export default function Products() {
   ));
   console.log('unapprovedProducts:', unapprovedProducts);
 
+  // State to control the sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const openSidebar = () => setIsSidebarOpen(true);
+  const closeSidebar = () => setIsSidebarOpen(false);
+
   return (
     <Box pt={{ base: "80px", md: "80px", xl: "80px" }}>
       {/* Main Fields */}
@@ -95,6 +102,11 @@ export default function Products() {
         gridTemplateColumns="1fr"
         gap={{ base: "20px", xl: "20px" }}
       >
+
+<SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px" mb="20px">
+        <TotalSpent />
+        {/* <WeeklyRevenue /> */}
+      </SimpleGrid>
         {/* Product Table */}
         <Card mb="20px">
           <Box overflowX="auto">
@@ -112,6 +124,7 @@ export default function Products() {
                   <Th>Action</Th>
                 </Tr>
               </Thead>
+
               <Tbody>
                 {currentProducts.map((product) => (
                   <Tr key={product.id} _hover={{ bg: tableHoverBg }}>
@@ -140,14 +153,18 @@ export default function Products() {
                       ${product.price}
                     </Td>
                     <Td px="6" py="4">
-                      <Button
-                        onClick={() => navigate(`/admin/products/${product.id}`)}
-                        variant="link"
-                        colorScheme="blue"
-                        size="sm"
-                      >
-                        View
-                      </Button>
+                      <Flex>
+                        <Button
+                          leftIcon={<MdVisibility />}
+                          colorScheme="blue"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => navigate(`/admin/products/${product.id}`)}
+                          mr="2"
+                        >
+                          Details
+                        </Button>
+                      </Flex>
                     </Td>
                   </Tr>
                 ))}
@@ -194,15 +211,8 @@ export default function Products() {
             Top Products
           </Text>
           <SimpleGrid columns={{ base: 1, md: 4 }} gap="20px">
-          {ProductCards}
+            {ProductCards}
           </SimpleGrid>
-          {/* <SimpleGrid
-            columns={{ base: 1, md: 4 }}
-            gap="20px"
-            minChildWidth="200px"
-          >
-            {ProductCard}
-          </SimpleGrid> */}
 
           <Text
             mt="45px"
@@ -215,10 +225,26 @@ export default function Products() {
             Approval Awaited
           </Text>
           <SimpleGrid columns={{ base: 1, md: 4 }} gap="20px">
-          {productCards}
+            {productCards}
           </SimpleGrid>
         </Flex>
       </Grid>
+
+      {/* Add the floating 'Add Product' button */}
+      <Button
+        position="fixed"
+        bottom="20px"
+        right="20px"
+        colorScheme="teal"
+        borderRadius="full"
+        size="lg"
+        onClick={openSidebar}
+      >
+        Add Product
+      </Button>
+
+      {/* AddProductSidebar Component */}
+      <AddProductSidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
     </Box>
   );
 }

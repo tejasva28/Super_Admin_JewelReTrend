@@ -6,12 +6,14 @@ import {
   MdHome,
   MdLock,
   MdOutlineShoppingCart,
+  MdAddShoppingCart, // New Icon for Orders
   MdCalendarToday, // Calendar Icon for the calendar route
   MdAssessment, // Sales Icon
   MdPeople, // Team Icon
   MdShoppingBasket, // Sellers Icon
   MdDashboard, // Dashboard Icon
 } from 'react-icons/md';
+import { GoDeviceMobile, GoDeviceDesktop } from 'react-icons/go'; // New Icon for Sessions
 
 // Admin Imports
 import MainDashboard from 'views/admin/default';
@@ -26,11 +28,11 @@ import AppraiserTable from 'views/admin/team/components/AppraiserTable';
 import CalendarPage from '/Users/tejasva/Downloads/horizon-ui-chakra-main/src/views/admin/calendar'; // Import the CalendarPage component
 import SessionsPage from 'views/admin/sessions/index'; 
 import Insurace from '/Users/tejasva/Downloads/horizon-ui-chakra-main/src/views/insurance';
+import Orders from './views/orders/index';
 
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
 import SellerDetails from 'views/admin/marketplace/sellerDetails';
-import { GoDeviceMobile } from 'react-icons/go';
 
 const routes = [
   {
@@ -63,6 +65,22 @@ const routes = [
       />
     ),
     component: <Products />,
+    sidebar: true, // Show in the sidebar
+    secondary: true,
+  },
+  {
+    name: 'Orders',
+    layout: '/admin',
+    path: '/orders',
+    icon: (
+      <Icon
+        as={MdAddShoppingCart} // Updated icon
+        width="20px"
+        height="20px"
+        color="inherit"
+      />
+    ),
+    component: <Orders />,
     sidebar: true, // Show in the sidebar
     secondary: true,
   },
@@ -125,7 +143,7 @@ const routes = [
     name: 'Sessions',
     layout: '/admin',
     path: '/sessions',
-    icon: <Icon as={GoDeviceMobile} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={GoDeviceDesktop} width="20px" height="20px" color="inherit" />, // Updated icon
     component: <SessionsPage />,
     sidebar: true,
   },

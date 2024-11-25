@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -14,10 +14,14 @@ import {
   HStack,
   Text,
   useColorModeValue,
+  IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
+import { AddIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card.js";
-import sellersData from "../marketplace/variables/sellersData";
+import AddSellerForm from "./components/AddSeller"; // Import the new form component
+import sellersData from "./variables/sellersData"; // Import the dummy data
 
 export default function Marketplace() {
   // Chakra Color Mode
@@ -26,13 +30,36 @@ export default function Marketplace() {
   const tableHeaderBg = useColorModeValue("gray.50", "gray.700");
   const tableHoverBg = useColorModeValue("gray.100", "gray.600");
 
+  // Modal control
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // State for sellers data and loading status
+  const [sellersDataState, setSellersDataState] = useState([]);
+
+  // Fetch sellers data from the dummy data
+  useEffect(() => {
+    // Comment out the API call
+    // fetch("/api/sellers")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setSellersData(data);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching sellers data:", error);
+    //     setLoading(false);
+    //   });
+
+    // Use the dummy data instead
+    setSellersDataState(sellersData);
+  }, []);
+
   return (
     <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
       {/* Sellers Table */}
       <Card>
         <Box overflowX="auto">
           <Table variant="simple" fontSize="16px">
-
             <Thead bg={tableHeaderBg}>
               <Tr>
                 <Th p={4}>
@@ -48,7 +75,7 @@ export default function Marketplace() {
               </Tr>
             </Thead>
             <Tbody>
-              {sellersData.map((seller, index) => (
+              {sellersDataState.map((seller, index) => (
                 <Tr key={index} _hover={{ bg: tableHoverBg }}>
                   <Td p={4}>
                     <Checkbox />
@@ -105,7 +132,7 @@ export default function Marketplace() {
               </Text>{" "}
               of{" "}
               <Text as="span" fontWeight="bold">
-                {sellersData.length}
+                {sellersDataState.length}
               </Text>
             </Text>
             <HStack spacing={2}>
@@ -128,6 +155,10 @@ export default function Marketplace() {
           </Flex>
         </Box>
       </Card>
+
+
+      {/* Add Seller Modal */}
+      <AddSellerForm isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 }

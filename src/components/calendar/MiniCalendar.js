@@ -1,4 +1,4 @@
-// File: src/components/MiniCalendar.js
+// File: src/components/calendar/MiniCalendar.js
 
 import React, { useState } from 'react';
 import {
@@ -10,22 +10,18 @@ import {
   useColorModeValue,
   IconButton,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  Input,
-  Textarea,
-  Stack,
-  useTheme, // Import useTheme
+  HStack,
+  Badge,
+  Avatar,
+  Divider,
+  useTheme,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   AddIcon,
+  InfoIcon,
 } from '@chakra-ui/icons';
 import {
   format,
@@ -39,26 +35,53 @@ import {
   isSameMonth,
   isSameDay,
 } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid'; // For unique job IDs
+import { useNavigate } from 'react-router-dom';
+import EventDetailsSidebar from './EventDetailsSidebar';
+import NewEventSidebar from './NewEventSidebar';
+import PropTypes from 'prop-types';
+import { useToast } from '@chakra-ui/react';
+import axios from 'axios'; // For API requests
 
 function MiniCalendar({ initialEvents = [] }) {
   const theme = useTheme(); // Access the theme
+  const navigate = useNavigate(); // Initialize navigate
+  const toast = useToast(); // Initialize toast
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState(initialEvents);
-  const [selectedDateEvents, setSelectedDateEvents] = useState([]);
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-  const [isNewEventModalOpen, setIsNewEventModalOpen] = useState(false);
+  
+  const [selectedEvent, setSelectedEvent] = useState(null); // Stores the event to display
+
+  // Use Chakra UI's useDisclosure for Event Details Sidebar
+  const {
+    isOpen: isEventDetailsOpen,
+    onOpen: onEventDetailsOpen,
+    onClose: onEventDetailsClose,
+  } = useDisclosure();
+
+  // Use Chakra UI's useDisclosure for New Event Sidebar
+  const {
+    isOpen: isNewEventOpen,
+    onOpen: onNewEventOpen,
+    onClose: onNewEventClose,
+  } = useDisclosure();
+
   const [newEventData, setNewEventData] = useState({
     title: '',
     description: '',
+    date: '',
+    time: '',
+    address: '',
+    shopName: '',
+    status: 'Pending', // Default status
   });
 
   // Use theme colors
   const bg = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue('gray.800', 'white');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
-  const hoverBg = useColorModeValue('gray.100', 'gray.700');
+  const hoverBg = useColorModeValue('blue.50', 'blue.700'); // Changed hover color for better contrast
   const modalBg = useColorModeValue('white', 'gray.800');
 
   // Access theme's primary color (adjust 'brand' to your theme's color key)
@@ -81,12 +104,14 @@ function MiniCalendar({ initialEvents = [] }) {
 
   // Handle date click
   const onDateClick = (day) => {
-    setSelectedDate(day);
     const dayEvents = events.filter((event) =>
       isSameDay(new Date(event.date), day)
     );
-    setSelectedDateEvents(dayEvents);
-    setIsEventModalOpen(true);
+
+    if (dayEvents.length > 0) {
+      setSelectedEvent(dayEvents[0]); // For simplicity, select the first event
+      onEventDetailsOpen();
+    }
   };
 
   // Handle input changes for new event
@@ -95,21 +120,99 @@ function MiniCalendar({ initialEvents = [] }) {
     setNewEventData({ ...newEventData, [name]: value });
   };
 
-  // Save new event
-  const handleSaveEvent = () => {
-    if (newEventData.title.trim() === '') {
-      // Optionally show a validation message
-      return;
+  // Handle location access with reverse geocoding
+  const handleLocationAccess = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            const response = await axios.get(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_GOOGLE_API_KEY`
+            );
+            if (response.data.status === 'OK') {
+              const address = response.data.results[0]?.formatted_address || 'Unknown Location';
+              setNewEventData((prevData) => ({
+                ...prevData,
+                address: address,
+              }));
+            } else {
+              toast({
+                title: 'Location Error',
+                description: 'Unable to retrieve address from coordinates.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+              });
+            }
+          } catch (error) {
+            console.error('Error fetching address:', error);
+            toast({
+              title: 'Error',
+              description: 'An error occurred while fetching the address.',
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            });
+          }
+        },
+        (error) => {
+          console.error('Error accessing location:', error);
+          toast({
+            title: 'Location Access Denied',
+            description: 'Unable to retrieve your location.',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      toast({
+        title: 'Geolocation Unsupported',
+        description: 'Geolocation is not supported by your browser.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
+  };
+
+  // Save new event
+  const handleSaveEvent = (values) => {
+    const { title, date, time, shopName, address, status, description } = values;
+
     const newEvent = {
-      title: newEventData.title,
-      date: selectedDate,
-      description: newEventData.description,
+      title,
+      date, // 'YYYY-MM-DD' format
+      time, // 'HH:MM' format
+      description,
+      jobId: uuidv4(), // Generate a unique jobId
+      customerName: 'N/A', // Placeholder, can be modified as needed
+      address,
+      shopName,
+      status,
     };
     setEvents([...events, newEvent]);
-    setNewEventData({ title: '', description: '' });
-    setIsNewEventModalOpen(false);
-    setIsEventModalOpen(false);
+    setNewEventData({
+      title: '',
+      description: '',
+      date: '',
+      time: '',
+      address: '',
+      shopName: '',
+      status: 'Pending',
+    });
+    onNewEventClose();
+
+    toast({
+      title: 'Event Created',
+      description: 'Your event has been successfully created.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   // Render header with month navigation
@@ -184,9 +287,9 @@ function MiniCalendar({ initialEvents = [] }) {
             borderColor={borderColor}
             bg={isSameDay(day, new Date()) ? todayBg : 'transparent'}
             color={isSameMonth(day, monthStart) ? textColor : 'gray.500'}
-            cursor="pointer"
-            _hover={{ bg: hoverBg }}
-            onClick={() => onDateClick(cloneDay)}
+            cursor={dayEvents.length > 0 ? "pointer" : "default"}
+            _hover={dayEvents.length > 0 ? { bg: hoverBg } : {}}
+            onClick={() => dayEvents.length > 0 && onDateClick(cloneDay)}
             minH="80px"
           >
             <Flex direction="column" h="100%">
@@ -194,19 +297,12 @@ function MiniCalendar({ initialEvents = [] }) {
                 {format(day, 'd')}
               </Text>
               {dayEvents.slice(0, 2).map((event, index) => (
-                <Box
-                  key={index}
-                  bg={eventBg}
-                  color={eventTextColor}
-                  px={2}
-                  py={1}
-                  borderRadius="md"
-                  mb={1}
-                  fontSize="xs"
-                  isTruncated
-                >
-                  {event.title}
-                </Box>
+                <HStack key={index} spacing={1} mb={1}>
+                  <InfoIcon w={3} h={3} color="teal.500" />
+                  <Text fontSize="xs" isTruncated>
+                    {event.title}
+                  </Text>
+                </HStack>
               ))}
               {dayEvents.length > 2 && (
                 <Text fontSize="xs" color="gray.500">
@@ -229,98 +325,58 @@ function MiniCalendar({ initialEvents = [] }) {
   };
 
   return (
-    <Box bg={bg} p={6} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
+    <Box bg={bg} p={6} borderRadius="lg" borderWidth="1px" borderColor={borderColor} position="relative">
       {renderHeader()}
       {renderDays()}
       {renderCells()}
 
-      {/* Event Details Modal */}
-      <Modal
-        isOpen={isEventModalOpen}
-        onClose={() => setIsEventModalOpen(false)}
-        size="md"
+      {/* Add Event Button */}
+      <Button
+        leftIcon={<AddIcon />}
+        colorScheme="teal"
+        variant="solid"
+        position="fixed"
+        bottom="20px"
+        right="20px"
+        onClick={onNewEventOpen}
+        aria-label="Add New Event"
       >
-        <ModalOverlay />
-        <ModalContent bg={modalBg}>
-          <ModalHeader>
-            {selectedDate
-              ? format(selectedDate, 'do MMMM yyyy')
-              : 'Select a Date'}
-            <Button
-              leftIcon={<AddIcon />}
-              colorScheme={primaryColor}
-              variant="solid"
-              size="sm"
-              ml={4}
-              onClick={() => {
-                setIsNewEventModalOpen(true);
-              }}
-            >
-              Add Event
-            </Button>
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {selectedDateEvents.length === 0 ? (
-              <Text>No events for this day.</Text>
-            ) : (
-              selectedDateEvents.map((event, index) => (
-                <Box key={index} mb={4}>
-                  <Text fontWeight="bold" fontSize="lg">
-                    {event.title}
-                  </Text>
-                  <Text fontSize="sm" color="gray.500">
-                    {format(new Date(event.date), 'PPPP')}
-                  </Text>
-                  <Text mt={2}>{event.description}</Text>
-                </Box>
-              ))
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={() => setIsEventModalOpen(false)}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        Add Event
+      </Button>
 
-      {/* New Event Modal */}
-      <Modal
-        isOpen={isNewEventModalOpen}
-        onClose={() => setIsNewEventModalOpen(false)}
-        size="md"
-      >
-        <ModalOverlay />
-        <ModalContent bg={modalBg}>
-          <ModalHeader>Add New Event</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack spacing={4}>
-              <Input
-                placeholder="Event Title"
-                name="title"
-                value={newEventData.title}
-                onChange={handleInputChange}
-              />
-              <Textarea
-                placeholder="Event Description"
-                name="description"
-                value={newEventData.description}
-                onChange={handleInputChange}
-              />
-            </Stack>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme={primaryColor} mr={3} onClick={handleSaveEvent}>
-              Save
-            </Button>
-            <Button onClick={() => setIsNewEventModalOpen(false)}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/* Event Details Sidebar */}
+      <EventDetailsSidebar
+        isOpen={isEventDetailsOpen}
+        onClose={onEventDetailsClose}
+        event={selectedEvent}
+      />
+
+      {/* New Event Sidebar */}
+      <NewEventSidebar
+        isOpen={isNewEventOpen}
+        onClose={onNewEventClose}
+        onSave={handleSaveEvent}
+        handleLocationAccess={handleLocationAccess}
+      />
     </Box>
   );
 }
+
+MiniCalendar.propTypes = {
+  initialEvents: PropTypes.arrayOf(
+    PropTypes.shape({
+      jobId: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      time: PropTypes.string.isRequired,
+      customerName: PropTypes.string,
+      shopName: PropTypes.string,
+      address: PropTypes.string,
+      status: PropTypes.string,
+      description: PropTypes.string,
+      avatarUrl: PropTypes.string, // Optional
+    })
+  ),
+};
 
 export default MiniCalendar;

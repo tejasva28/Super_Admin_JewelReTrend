@@ -14,6 +14,7 @@ import tableDataDevelopment from "views/admin/team/variables/tableDataDevelopmen
 import tableDataCheck from "views/admin/team/variables/tableDataCheck.json";
 import photographerData from "views/admin/team/variables/photographerData.json";
 import tableDataComplex from "views/admin/team/variables/tableDataComplex.json";
+import AddTeam from "./components/AddTeam.js";
 import React from "react";
 
 export default function Settings() {
@@ -41,7 +42,8 @@ export default function Settings() {
             tableData={tableDataColumns} */}
           
         </SimpleGrid>
-      
+      {/* Add Seller Modal */}
+      <AddTeam />
     </Box>
   );
 }
