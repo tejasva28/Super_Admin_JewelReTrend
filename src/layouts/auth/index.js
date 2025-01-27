@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, Outlet } from 'react-router-dom';
 import routes from 'routes.js';
+// import AuthNavbar from 'components/navbar/AuthNavbar';
 
 // Chakra imports
 import { Box, useColorModeValue } from '@chakra-ui/react';
@@ -68,3 +69,14 @@ export default function Auth() {
     </Box>
   );
 }
+
+const AuthLayout = () => {
+  return (
+    <>
+      {/* <AuthNavbar /> */}
+      <Outlet />
+    </>
+  );
+};
+
+export { AuthLayout };

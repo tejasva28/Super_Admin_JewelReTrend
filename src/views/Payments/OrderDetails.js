@@ -11,7 +11,6 @@ import {
   HStack,
   Container,
   Divider,
-  Textarea,
   Heading,
   Icon,
   useColorModeValue,
@@ -25,7 +24,11 @@ import {
   Th,
   Td,
   TableContainer,
+  Stack,
   Circle,
+  Center,
+  Input,
+  Textarea,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -37,9 +40,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  RadioGroup,
-  Radio,
-  Checkbox,
 } from '@chakra-ui/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -53,15 +53,8 @@ import {
   FaMoneyBillWave,
   FaDownload,
   FaEnvelope,
-  FaBell,
 } from 'react-icons/fa';
-
-// Context that provides orders, updateOrderStatus, sendFeedback, etc.
-import { OrdersContext } from './components/OrdersContext';
-
-// Components for UI
-import TransitTimeline from './components/TransitTimeline';
-import OrderNotifications from './components/OrderNotifications';
+import { OrdersContext } from './components/PaymentContext';
 
 export default function OrderDetails() {
   // Extract `orderId` from URL Parameters
@@ -72,25 +65,15 @@ export default function OrderDetails() {
   // Chakra UI Modal Controls
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // Additional Modal Controls for Appraisal
-  const [isAppraiseOpen, setIsAppraiseOpen] = useState(false);
-
-  // Notification Drawer Controls
-  const {
-    isOpen: isNotificationsOpen,
-    onOpen: onOpenNotifications,
-    onClose: onCloseNotifications,
-  } = useDisclosure();
-
-  // Color mode styling
+  // Define Color Modes for Styling
   const textColor = useColorModeValue('gray.800', 'white');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
   const cardBg = useColorModeValue('white', 'gray.800');
   const sectionBg = useColorModeValue('gray.50', 'gray.700');
   const accentColor = useColorModeValue('blue.500', 'blue.300');
   const inputBg = useColorModeValue('gray.100', 'gray.700');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  // Badge color schemes
+  // Define Badge Colors Based on Order Status
   const badgeColorScheme = {
     Pending: 'yellow',
     Accepted: 'blue',
@@ -102,24 +85,17 @@ export default function OrderDetails() {
     Rejected: 'red',
   };
 
-  // Consume OrdersContext to get data/functions
-  const { ordersData, updateOrderStatus, sendFeedback, loading } = useContext(OrdersContext);
+  // Consume OrdersContext to Access Orders Data and Functions
+  const { ordersData, updateOrderStatus, loading } = useContext(OrdersContext);
 
-  // Local state to manage the current status
+  // Local State to Manage Order Status
   const [status, setStatus] = useState('Pending');
 
-  // Local State for appraisal result
-  const [appraisedResult, setAppraisedResult] = useState('');
-
-  // Local state for feedback form
-  const [feedbackRecipient, setFeedbackRecipient] = useState({
-    customer: true,
-    seller: false,
-  });
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  // Local State for Feedback Form
+  const [feedback, setFeedback] = useState('');
   const [feedbackError, setFeedbackError] = useState('');
 
-  // Stepper statuses
+  // Order Statuses for the Stepper
   const statuses = [
     { label: 'Pending', icon: FaInfoCircle },
     { label: 'Accepted', icon: FaCheckCircle },
@@ -129,30 +105,32 @@ export default function OrderDetails() {
     { label: 'Delivered', icon: FaCheckCircle },
   ];
 
-  // Find the specific order by `orderId`
+  // Find the Specific Order Based on `orderId`
   const order = useMemo(() => {
-    if (!Array.isArray(ordersData)) return null;
-    const foundOrder = ordersData.find((o) => String(o.orderId) === String(orderId)) || {};
-    return {
-      ...foundOrder,
-      notifications: Array.isArray(foundOrder.notifications)
-        ? foundOrder.notifications
-        : [],
-    };
+    if (!Array.isArray(ordersData)) {
+      console.warn('ordersData is not an array.');
+      return null;
+    }
+
+    const foundOrder = ordersData.find(
+      (o) => String(o.orderId).trim() === String(orderId).trim()
+    );
+
+    if (!foundOrder) {
+      console.warn(`Order with orderId "${orderId}" not found.`);
+    }
+
+    return foundOrder || null;
   }, [ordersData, orderId]);
 
-  // Update status when the order data changes
+  // Update Local Status State When Order Data Changes
   useEffect(() => {
     if (order) {
       setStatus(order.orderStatus || 'Pending');
     }
   }, [order]);
 
-  // Determine which step is current
-  const currentStatusIndex = statuses.findIndex((s) => s.label === status);
-  const validatedStatusIndex = currentStatusIndex !== -1 ? currentStatusIndex : 0;
-
-  // If data is still loading
+  // Handle Loading State
   if (loading) {
     return (
       <Container maxW="container.lg" py="6">
@@ -174,7 +152,7 @@ export default function OrderDetails() {
     );
   }
 
-  // If order not found
+  // Handle Case When Order Is Not Found
   if (!order) {
     return (
       <Container maxW="container.lg" py="6">
@@ -198,18 +176,8 @@ export default function OrderDetails() {
     );
   }
 
-  // --- ACTION HANDLERS ---
+  // Action Handlers
   const handleAcceptOrder = () => {
-    if (!['Appraised', 'Shipped', 'Delivered'].includes(status)) {
-      toast({
-        title: 'Invalid Action.',
-        description: 'Cannot accept order from the current status.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
     setStatus('Accepted');
     updateOrderStatus(orderId, 'Accepted');
     toast({
@@ -222,16 +190,6 @@ export default function OrderDetails() {
   };
 
   const handleRejectOrder = () => {
-    if (!['Appraised', 'Shipped', 'Delivered'].includes(status)) {
-      toast({
-        title: 'Invalid Action.',
-        description: 'Cannot reject order from the current status.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
     setStatus('Rejected');
     updateOrderStatus(orderId, 'Rejected');
     toast({
@@ -241,143 +199,30 @@ export default function OrderDetails() {
       duration: 3000,
       isClosable: true,
     });
-    navigate('/orders');
+    navigate('/orders'); // Redirect to orders dashboard
   };
 
   const handleMarkAsHandedOver = () => {
-    if (!['Appraised', 'Shipped', 'Delivered'].includes(status)) {
-      toast({
-        title: 'Invalid Action.',
-        description: 'Cannot mark as handed over from the current status.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
     setStatus('Handed Over');
     updateOrderStatus(orderId, 'Handed Over');
     toast({
       title: 'Order Handed Over.',
-      description: 'You have handed over the order.',
+      description: 'You have handed over the order to the dark store.',
       status: 'success',
       duration: 3000,
       isClosable: true,
     });
   };
 
-  // Mark as Appraised
-  const handleAppraisedStatus = () => {
-    if (!['Appraised', 'Shipped', 'Delivered'].includes(status)) {
-      toast({
-        title: 'Invalid Action.',
-        description: 'Cannot appraise order from the current status.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (!appraisedResult) {
-      toast({
-        title: 'Select Appraisal Result.',
-        description: 'Please select whether the order has passed or failed appraisal.',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (appraisedResult === 'failed') {
-      setStatus('Rejected');
-      updateOrderStatus(orderId, 'Rejected');
-      toast({
-        title: 'Order Rejected.',
-        description: 'The order failed appraisal and has been rejected.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      setAppraisedResult('');
-      setIsAppraiseOpen(false);
-      navigate('/orders');
-    } else {
-      setStatus('Appraised');
-      updateOrderStatus(orderId, 'Appraised', 'passed');
-      toast({
-        title: 'Order Appraised.',
-        description: 'The order has passed appraisal and is ready to be shipped.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      setAppraisedResult('');
-      setIsAppraiseOpen(false);
-    }
-  };
-
-  // Mark as Shipped
-  const handleMarkAsShipped = () => {
-    if (!['Appraised', 'Shipped', 'Delivered'].includes(status)) {
-      toast({
-        title: 'Invalid Action.',
-        description: 'Cannot mark as shipped from the current status.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-    setStatus('Shipped');
-    updateOrderStatus(orderId, 'Shipped');
-    toast({
-      title: 'Order Shipped.',
-      description: 'The order has been marked as shipped.',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
-  // Mark as Delivered
-  const handleMarkAsDelivered = () => {
-    if (!['Appraised', 'Shipped', 'Delivered'].includes(status)) {
-      toast({
-        title: 'Invalid Action.',
-        description: 'Cannot mark as delivered from the current status.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-    setStatus('Delivered');
-    updateOrderStatus(orderId, 'Delivered');
-    toast({
-      title: 'Order Delivered.',
-      description: 'The order has been marked as delivered.',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
-  // Handle feedback form submission
+  // Handle Feedback Submission
   const handleSendFeedback = () => {
-    const { customer, seller } = feedbackRecipient;
-    if (!customer && !seller) {
-      setFeedbackError('Please select at least one recipient.');
-      return;
-    }
-    if (feedbackMessage.trim() === '') {
-      setFeedbackError('Feedback message cannot be empty.');
+    if (feedback.trim() === '') {
+      setFeedbackError('Feedback cannot be empty.');
       return;
     }
 
-    // Send feedback
-    if (customer) sendFeedback(orderId, feedbackMessage, 'customer');
-    if (seller) sendFeedback(orderId, feedbackMessage, 'seller');
+    // Placeholder for sending feedback logic
+    console.log('Feedback submitted:', feedback);
 
     toast({
       title: 'Feedback Sent.',
@@ -387,17 +232,19 @@ export default function OrderDetails() {
       isClosable: true,
     });
 
-    // Reset
-    setFeedbackMessage('');
-    setFeedbackRecipient({ customer: true, seller: false });
+    // Reset feedback form
+    setFeedback('');
     setFeedbackError('');
     onClose();
   };
 
+  // Determine the index of the current status
+  const currentStatusIndex = statuses.findIndex((s) => s.label === status);
+
   return (
     <Container maxW="container.xl" py="6">
       <VStack spacing="8" align="stretch">
-        {/* Top Bar (Order Info, Download Invoice, Feedback, Notifications) */}
+        {/* Top Bar with Order Details */}
         <Flex
           justifyContent="space-between"
           alignItems="center"
@@ -426,6 +273,7 @@ export default function OrderDetails() {
               colorScheme="blue"
               variant="outline"
               onClick={() => {
+                // Placeholder for download invoice logic
                 toast({
                   title: 'Download Invoice.',
                   description: 'Invoice download functionality not implemented yet.',
@@ -437,22 +285,17 @@ export default function OrderDetails() {
             >
               Download Invoice
             </Button>
-            <Button leftIcon={<FaEnvelope />} colorScheme="teal" onClick={onOpen}>
-              Send Feedback
-            </Button>
             <Button
-              leftIcon={<FaBell />}
-              colorScheme="purple"
-              variant="solid"
-              onClick={onOpenNotifications}
-              aria-label="View Notifications"
+              leftIcon={<FaEnvelope />}
+              colorScheme="teal"
+              onClick={onOpen}
             >
-              Notifications
+              Send Feedback
             </Button>
           </HStack>
         </Flex>
 
-        {/* Progress Tracker (Stepper) */}
+        {/* Progress Tracker */}
         <Box
           bg={sectionBg}
           p="6"
@@ -463,19 +306,13 @@ export default function OrderDetails() {
         >
           <Flex justify="space-between" align="center" wrap="wrap" position="relative">
             {statuses.map((s, index) => (
-              <Flex
-                key={s.label}
-                align="center"
-                direction="column"
-                flex="1"
-                position="relative"
-              >
-                {/* Connector line between steps */}
+              <Flex key={s.label} align="center" direction="column" flex="1">
+                {/* Connector Line */}
                 {index !== 0 && (
                   <Box
                     height="2px"
                     width="100%"
-                    bg={index <= validatedStatusIndex ? 'green.500' : 'gray.300'}
+                    bg={index <= currentStatusIndex ? 'green.500' : 'gray.300'}
                     position="absolute"
                     top="20px"
                     left="50%"
@@ -488,7 +325,7 @@ export default function OrderDetails() {
                   <Circle
                     size="40px"
                     bg={
-                      index <= validatedStatusIndex
+                      index <= currentStatusIndex
                         ? badgeColorScheme[s.label]
                           ? `${badgeColorScheme[s.label]}.500`
                           : accentColor
@@ -502,8 +339,8 @@ export default function OrderDetails() {
                     mt="2"
                     fontSize="sm"
                     textAlign="center"
-                    color={index <= validatedStatusIndex ? textColor : 'gray.500'}
-                    fontWeight={index === validatedStatusIndex ? 'bold' : 'normal'}
+                    color={index <= currentStatusIndex ? textColor : 'gray.500'}
+                    fontWeight={index === currentStatusIndex ? 'bold' : 'normal'}
                   >
                     {s.label}
                   </Text>
@@ -513,10 +350,11 @@ export default function OrderDetails() {
           </Flex>
         </Box>
 
-        {/* Order Info (Customer, Shipping, Seller, Payment) */}
+        {/* Order Information Sections */}
         <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap="6">
+          {/* Left Column */}
           <VStack spacing="6" align="stretch">
-            {/* Customer Info */}
+            {/* Customer Information */}
             <Box
               bg={cardBg}
               p="6"
@@ -559,7 +397,7 @@ export default function OrderDetails() {
               </VStack>
             </Box>
 
-            {/* Shipping Info */}
+            {/* Shipping Information */}
             <Box
               bg={cardBg}
               p="6"
@@ -601,34 +439,9 @@ export default function OrderDetails() {
                 </HStack>
               </VStack>
             </Box>
-
-            {/* Seller Info */}
-            <Box
-              bg={cardBg}
-              p="6"
-              borderRadius="md"
-              boxShadow="sm"
-              borderWidth="1px"
-              borderColor={borderColor}
-            >
-              <Flex align="center" mb="4">
-                <Icon as={FaUser} boxSize="6" color={accentColor} mr="2" />
-                <Heading as="h3" size="md" color={textColor}>
-                  Seller Information
-                </Heading>
-              </Flex>
-              <VStack align="start" spacing="3">
-                <HStack>
-                  <Text fontWeight="600" minW="150px">
-                    Seller Name:
-                  </Text>
-                  <Text>{order.sellerName}</Text>
-                </HStack>
-                {/* Add more seller details if needed */}
-              </VStack>
-            </Box>
           </VStack>
 
+          {/* Right Column */}
           <VStack spacing="6" align="stretch">
             {/* Payment Details */}
             <Box
@@ -697,35 +510,10 @@ export default function OrderDetails() {
                     {order.paymentStatus}
                   </Badge>
                 </HStack>
-                <HStack>
-                  <Text fontWeight="600" minW="150px">
-                    Appraised Status:
-                  </Text>
-                  <Badge
-                    colorScheme={
-                      order.appraisedStatus === 'passed'
-                        ? 'green'
-                        : order.appraisedStatus === 'failed'
-                        ? 'red'
-                        : 'gray'
-                    }
-                  >
-                    {order.appraisedStatus
-                      ? order.appraisedStatus.charAt(0).toUpperCase() +
-                        order.appraisedStatus.slice(1)
-                      : 'N/A'}
-                  </Badge>
-                </HStack>
               </VStack>
             </Box>
           </VStack>
         </Grid>
-
-        {/* Transit Timeline */}
-        <TransitTimeline
-          transitDetails={order.transitDetails}
-          shipmentInfo={order.shipmentInfo}
-        />
 
         {/* Items Ordered */}
         <Box
@@ -784,6 +572,7 @@ export default function OrderDetails() {
             </Heading>
           </Flex>
           <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap="4">
+            {/* Summary Items */}
             <VStack align="start" spacing="3">
               <HStack>
                 <Text fontWeight="600" minW="150px">
@@ -810,6 +599,7 @@ export default function OrderDetails() {
                 <Text>${order.discounts.toFixed(2)}</Text>
               </HStack>
             </VStack>
+            {/* Grand Total */}
             <VStack align="end" spacing="3">
               <Divider />
               <HStack>
@@ -824,70 +614,38 @@ export default function OrderDetails() {
           </Grid>
         </Box>
 
-        {/* Feedback Modal */}
-        <Modal
-          isOpen={isOpen}
-          onClose={() => {
-            setFeedbackError('');
-            onClose();
-          }}
-        >
+        {/* Message Box Modal */}
+        <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Send Feedback</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <FormControl isInvalid={feedbackError}>
-                <FormLabel>Feedback Recipients</FormLabel>
-                <Checkbox
-                  isChecked={feedbackRecipient.customer}
-                  onChange={(e) =>
-                    setFeedbackRecipient({ ...feedbackRecipient, customer: e.target.checked })
-                  }
-                >
-                  Customer
-                </Checkbox>
-                <Checkbox
-                  isChecked={feedbackRecipient.seller}
-                  onChange={(e) =>
-                    setFeedbackRecipient({ ...feedbackRecipient, seller: e.target.checked })
-                  }
-                >
-                  Seller
-                </Checkbox>
-              </FormControl>
-
-              <FormControl mt="4" isInvalid={feedbackError}>
                 <FormLabel>Feedback Message</FormLabel>
                 <Textarea
                   placeholder="Type your feedback here..."
-                  value={feedbackMessage}
-                  onChange={(e) => setFeedbackMessage(e.target.value)}
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
                   bg={inputBg}
                 />
                 {feedbackError && <FormErrorMessage>{feedbackError}</FormErrorMessage>}
               </FormControl>
             </ModalBody>
+
             <ModalFooter>
               <Button colorScheme="blue" mr={3} onClick={handleSendFeedback}>
                 Send
               </Button>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setFeedbackError('');
-                  onClose();
-                }}
-              >
+              <Button variant="ghost" onClick={() => { setFeedbackError(''); onClose(); }}>
                 Cancel
               </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
 
-        {/* Action Buttons (focus on final steps) */}
+        {/* Action Buttons */}
         <Flex justifyContent="flex-end" mt="4">
-          {/* (Optional) Accept/Reject if in Pending */}
           {status === 'Pending' && (
             <>
               <Button
@@ -902,15 +660,14 @@ export default function OrderDetails() {
               <Button
                 colorScheme="red"
                 leftIcon={<FaTimesCircle />}
-                onClick={handleRejectOrder}
                 aria-label="Reject Order"
+                onClick={handleRejectOrder}
               >
                 Reject Order
               </Button>
             </>
           )}
 
-          {/* Hand Over if in Accepted */}
           {status === 'Accepted' && (
             <Button
               colorScheme="orange"
@@ -922,86 +679,30 @@ export default function OrderDetails() {
             </Button>
           )}
 
-          {/* Mark as Appraised if in Handed Over */}
           {status === 'Handed Over' && (
-            <Button
-              colorScheme="teal"
-              leftIcon={<FaCheckCircle />}
-              onClick={() => setIsAppraiseOpen(true)}
-              aria-label="Appraise Order"
-              mr="4"
-            >
-              Appraise Order
-            </Button>
-          )}
-
-          {/* Mark as Shipped if in Appraised */}
-          {status === 'Appraised' && (
-            <Button
-              colorScheme="cyan"
-              leftIcon={<FaShippingFast />}
-              onClick={handleMarkAsShipped}
-              aria-label="Mark as Shipped"
-              mr="4"
-            >
-              Mark as Shipped
-            </Button>
-          )}
-
-          {/* Mark as Delivered if in Shipped */}
-          {status === 'Shipped' && (
-            <Button
-              colorScheme="green"
-              leftIcon={<FaCheckCircle />}
-              onClick={handleMarkAsDelivered}
-              aria-label="Mark as Delivered"
-            >
-              Mark as Delivered
-            </Button>
-          )}
-
-          {/* Final or invalid states */}
-          {['Delivered', 'Cancelled', 'Rejected'].includes(status) && (
             <Text fontSize="lg" fontWeight="bold" color="gray.500">
-              Order is in the "{status}" stage. No further action is required.
+              Order has been handed over to the dark store for appraisal.
+            </Text>
+          )}
+
+          {['Appraised', 'Shipped', 'Delivered'].includes(status) && (
+            <Text fontSize="lg" fontWeight="bold" color="gray.500">
+              Order is currently in the "{status}" stage. No further action is required.
+            </Text>
+          )}
+
+          {status === 'Rejected' && (
+            <Text color="red.500" fontSize="lg" fontWeight="bold">
+              You have rejected this order.
+            </Text>
+          )}
+
+          {status === 'Cancelled' && (
+            <Text color="red.500" fontSize="lg" fontWeight="bold">
+              This order has been cancelled.
             </Text>
           )}
         </Flex>
-
-        {/* Modal for Appraising (Passed/Failed) */}
-        <Modal isOpen={isAppraiseOpen} onClose={() => setIsAppraiseOpen(false)}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Appraise Order</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <FormControl>
-                <FormLabel>Appraisal Result</FormLabel>
-                <RadioGroup onChange={setAppraisedResult} value={appraisedResult}>
-                  <HStack spacing="24px">
-                    <Radio value="passed">Passed</Radio>
-                    <Radio value="failed">Failed</Radio>
-                  </HStack>
-                </RadioGroup>
-              </FormControl>
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="teal" mr={3} onClick={handleAppraisedStatus}>
-                Submit
-              </Button>
-              <Button variant="ghost" onClick={() => setIsAppraiseOpen(false)}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        {/* Notifications Drawer */}
-        <OrderNotifications
-          isOpen={isNotificationsOpen}
-          onClose={onCloseNotifications}
-          notifications={Array.isArray(order.notifications) ? order.notifications : []}
-        />
       </VStack>
     </Container>
   );

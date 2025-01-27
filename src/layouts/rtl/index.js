@@ -7,7 +7,7 @@ import Sidebar from 'components/sidebar/Sidebar.js';
 import { RtlProvider } from 'components/rtlProvider/RtlProvider.js';
 import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, Outlet } from 'react-router-dom';
 import routes from 'routes.js';
 
 // Custom Chakra theme
@@ -132,7 +132,7 @@ export default function Dashboard(props) {
             <Box>
               <Navbar
                 onOpen={onOpen}
-                logoText={'Horizon UI Dashboard'}
+                logoText={'JewelReTrend'}
                 brandText={getActiveRoute(routes)}
                 secondary={getActiveNavbar(routes)}
                 message={getActiveNavbarText(routes)}
@@ -157,6 +157,7 @@ export default function Dashboard(props) {
                   element={<Navigate to="/rtl/default" replace />}
                 />
               </Routes>
+              <Outlet />
             </Box>
           ) : null}
           <Box>

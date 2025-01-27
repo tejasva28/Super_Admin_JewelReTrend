@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import unapprovedProducts from './variables/unapprovedData'; // Adjust the import path
 
-export default function AppraisedDetails() {
+const AppraisedDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const productId = parseInt(id, 10);
@@ -99,7 +99,7 @@ export default function AppraisedDetails() {
             />
           ) : (
             <Heading as="h1" size="xl">
-              {product.name}
+              {product.title}
             </Heading>
           )}
           <Flex>
@@ -317,4 +317,6 @@ export default function AppraisedDetails() {
       </Stack>
     </Container>
   );
-}
+};
+
+export default AppraisedDetails;

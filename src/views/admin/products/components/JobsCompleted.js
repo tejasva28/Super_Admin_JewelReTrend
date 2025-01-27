@@ -177,7 +177,7 @@ export default function JobsCompleted({ tableData, desiredAttributes }) {
           lineHeight="100%"
           mb={{ base: '8px', md: '0' }} // Margin bottom on mobile
         >
-          Completed Orders
+          Completed Jobs
         </Text>
         <Menu />
       </Flex>

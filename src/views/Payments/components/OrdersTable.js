@@ -1,4 +1,4 @@
-// File: src/views/jobs/components/JobsCompleted.js
+// File: src/views/orders/components/OrdersTable.js
 
 import React, { useState, useMemo } from 'react';
 import {
@@ -16,7 +16,7 @@ import {
   Input,
   Select,
   Checkbox,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 import {
   createColumnHelper,
   flexRender,
@@ -24,195 +24,146 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table';
-import { MdVisibility } from 'react-icons/md';
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
-import Card from 'components/card/Card';
-import Menu from 'components/menu/MainMenu';
-import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
+} from "@tanstack/react-table";
+import { MdVisibility } from "react-icons/md";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+import Card from "components/card/Card";
+import PropTypes from "prop-types";
+import { debounce } from "lodash";
 
-// Initialize the column helper
 const columnHelper = createColumnHelper();
 
-export default function JobsCompleted({ tableData, desiredAttributes }) {
+export default function OrdersTable({ tableData }) {
   const navigate = useNavigate();
-  const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
-  const headerBg = useColorModeValue('gray.100', 'gray.700');
-  const primaryColor = useColorModeValue('blue', 'blue');
+  const textColor = useColorModeValue("gray.800", "white");
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+  const headerBg = useColorModeValue("gray.100", "gray.700");
 
-  // State for global filter
   const [globalFilter, setGlobalFilter] = useState('');
-
-  // Debounced global filter to improve performance
   const debouncedSetGlobalFilter = useMemo(
     () => debounce((value) => setGlobalFilter(value), 300),
     []
   );
 
-  // Cleanup debounce on unmount
   React.useEffect(() => {
     return () => {
       debouncedSetGlobalFilter.cancel();
     };
   }, [debouncedSetGlobalFilter]);
 
-  // Define columns based on desiredAttributes
-  const columns = useMemo(() => {
-    const cols = [];
-
-    // Selection Column for row selection
-    cols.unshift(
-      columnHelper.display({
-        id: 'select',
-        header: ({ table }) => (
-          <Checkbox
-            isChecked={table.getIsAllPageRowsSelected()}
-            isIndeterminate={table.getIsSomePageRowsSelected()}
-            onChange={table.getToggleAllPageRowsSelectedHandler()}
-            aria-label="Select all rows"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            isChecked={row.getIsSelected()}
-            isIndeterminate={row.getIsSomeSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            aria-label={`Select row ${row.original.jobId}`}
-          />
-        ),
-      })
-    );
-
-    if (desiredAttributes.includes('jobId')) {
-      cols.push(
-        columnHelper.accessor('jobId', {
-          id: 'jobId',
-          header: () => 'Job ID',
-          cell: (info) => info.getValue(),
-        })
-      );
-    }
-
-    if (desiredAttributes.includes('name')) {
-      cols.push(
-        columnHelper.accessor('name', {
-          id: 'name',
-          header: () => 'Customer Name',
-          cell: (info) => info.getValue(),
-        })
-      );
-    }
-
-    if (desiredAttributes.includes('productName')) {
-      cols.push(
-        columnHelper.accessor('productName', {
-          id: 'productName',
-          header: () => 'Product Name',
-          cell: (info) => info.getValue(),
-        })
-      );
-    }
-
-    // Actions Column
-    cols.push(
-      columnHelper.display({
-        id: 'viewDetails',
-        header: () => 'Actions',
-        cell: ({ row }) => (
+  const columns = useMemo(() => [
+    // Selection Column
+    columnHelper.display({
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          isChecked={table.getIsAllPageRowsSelected()}
+          isIndeterminate={table.getIsSomePageRowsSelected()}
+          onChange={table.getToggleAllPageRowsSelectedHandler()}
+          aria-label="Select all orders"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          isChecked={row.getIsSelected()}
+          isIndeterminate={row.getIsSomeSelected()}
+          onChange={row.getToggleSelectedHandler()}
+          aria-label={`Select order ${row.original.orderId}`}
+        />
+      ),
+    }),
+    // Order ID
+    columnHelper.accessor('orderId', {
+      header: 'Order ID',
+      cell: (info) => info.getValue(),
+    }),
+    // Order Date
+    columnHelper.accessor('orderDate', {
+      header: 'Order Date',
+      cell: (info) => new Date(info.getValue()).toLocaleString(),
+    }),
+    // Order Status
+    columnHelper.accessor('orderStatus', {
+      header: 'Order Status',
+      cell: (info) => info.getValue(),
+    }),
+    // Payment Status
+    columnHelper.accessor('paymentStatus', {
+      header: 'Payment Status',
+      cell: (info) => info.getValue(),
+    }),
+    // Actions
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <Flex>
           <Button
             leftIcon={<MdVisibility />}
-            colorScheme={primaryColor}
+            colorScheme="blue"
             variant="outline"
             size="sm"
-            onClick={() => navigate(`/job-details/${row.original.jobId}`)}
-            aria-label={`View details for job ${row.original.jobId}`}
+            onClick={() => navigate(`/order-details/${row.original.orderId}`)}
+            aria-label={`View details for order ${row.original.orderId}`}
+            mr="2"
           >
             View Details
           </Button>
-        ),
-      })
-    );
-
-    return cols;
-  }, [desiredAttributes, navigate, primaryColor]);
+        </Flex>
+      ),
+    }),
+  ], [navigate]);
 
   const data = useMemo(() => tableData, [tableData]);
 
-  // Initialize the table instance
   const table = useReactTable({
     data,
     columns,
     state: {
       globalFilter,
     },
-    globalFilterFn: 'includesString', // Built-in filter function
+    globalFilterFn: 'includesString',
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(), // Enable filtering
-    getPaginationRowModel: getPaginationRowModel(), // Enable pagination
-    debugTable: false,
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
-    <Card
-      flexDirection="column"
-      w="100%"
-      px="0px"
-      overflowX="auto"
-    >
-      {/* Header Section */}
+    <Card flexDirection="column" w="100%" px="0px" overflowX="auto">
+      {/* Header */}
       <Flex
         px="25px"
         mb="8px"
         justifyContent="space-between"
         align="center"
-        flexDirection={{ base: 'column', md: 'row' }} // Responsive layout
+        flexDirection={{ base: 'column', md: 'row' }}
       >
         <Text
           color={textColor}
           fontSize="22px"
           fontWeight="700"
           lineHeight="100%"
-          mb={{ base: '8px', md: '0' }} // Margin bottom on mobile
+          mb={{ base: '8px', md: '0' }}
         >
-          Completed Orders
+          Order Management
         </Text>
-        <Menu />
+        {/* You can add additional menu or actions here */}
       </Flex>
 
-      {/* Global Filter Input */}
-      <Flex px="25px" mb="16px" align="center">
+      {/* Global Filter */}
+      <Flex px="25px" mb="16px" align="right">
         <Input
-          placeholder="Search completed jobs..."
+          placeholder="Search orders..."
           onChange={(e) => debouncedSetGlobalFilter(e.target.value)}
           maxW="300px"
           aria-label="Global search"
         />
       </Flex>
 
-      {/* Table Section */}
+      {/* Table */}
       <Box>
-        <Table
-          variant="simple" // Changed from "striped" to "simple" to remove grey stripes
-          mb="24px"
-          mt="12px"
-          sx={{
-            'thead th': {
-              position: 'sticky',
-              top: '0',
-              bg: headerBg,
-              zIndex: 1,
-            },
-            'tbody tr:hover': {
-              bg: useColorModeValue('green.50', 'green.700'), // Changed hover color for better contrast
-            },
-            'tbody tr:nth-of-type(even)': {
-              bg: 'transparent', // Removed alternating row colors
-            },
-          }}
-        >
+        <Table variant="simple" mb="24px" mt="12px">
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
@@ -225,23 +176,17 @@ export default function JobsCompleted({ tableData, desiredAttributes }) {
                     cursor={header.column.getCanSort() ? 'pointer' : 'default'}
                     onClick={header.column.getToggleSortingHandler()}
                   >
-                    <Flex
-                      justifyContent="space-between"
-                      align="center"
-                      fontSize={{ sm: '10px', lg: '12px' }}
-                      color="gray.400"
-                    >
+                    <Flex justifyContent="space-between" align="center">
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                      {/* Sorting Indicators */}
-                      {header.column.getCanSort() ? (
+                      {header.column.getIsSorted() ? (
                         header.column.getIsSorted() === 'asc' ? (
                           <TriangleUpIcon aria-label="sorted ascending" />
-                        ) : header.column.getIsSorted() === 'desc' ? (
+                        ) : (
                           <TriangleDownIcon aria-label="sorted descending" />
-                        ) : null
+                        )
                       ) : null}
                     </Flex>
                   </Th>
@@ -253,7 +198,7 @@ export default function JobsCompleted({ tableData, desiredAttributes }) {
             {table.getRowModel().rows.length === 0 ? (
               <Tr>
                 <Td colSpan={columns.length} textAlign="center" py="20px">
-                  No completed jobs found.
+                  No orders found.
                 </Td>
               </Tr>
             ) : (
@@ -280,14 +225,13 @@ export default function JobsCompleted({ tableData, desiredAttributes }) {
         </Table>
       </Box>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <Flex
         px="25px"
         justifyContent="space-between"
         align="center"
         flexDirection={{ base: 'column', md: 'row' }}
       >
-        {/* Page Size Selector */}
         <Flex align="center" mb={{ base: '8px', md: '0' }}>
           <Text mr="8px" color="gray.500" fontSize="sm">
             Rows per page:
@@ -309,7 +253,6 @@ export default function JobsCompleted({ tableData, desiredAttributes }) {
           </Select>
         </Flex>
 
-        {/* Page Navigation Buttons */}
         <Flex align="center">
           <Button
             onClick={() => table.setPageIndex(0)}
@@ -351,26 +294,23 @@ export default function JobsCompleted({ tableData, desiredAttributes }) {
           </Button>
         </Flex>
 
-        {/* Total Records */}
         <Text fontSize="sm" mt={{ base: '4px', md: '0' }}>
-          Total Records: {tableData.length}
+          Total Orders: {tableData.length}
         </Text>
       </Flex>
     </Card>
   );
 }
 
-// Define PropTypes for JobsCompleted
-JobsCompleted.propTypes = {
+OrdersTable.propTypes = {
   tableData: PropTypes.arrayOf(
     PropTypes.shape({
-      jobId: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      productName: PropTypes.string.isRequired,
-      // Add other necessary fields
+      orderId: PropTypes.string.isRequired,
+      orderDate: PropTypes.string.isRequired,
+      customerName: PropTypes.string.isRequired,
+      orderStatus: PropTypes.string.isRequired,
+      paymentStatus: PropTypes.string.isRequired,
+      // ...other fields
     })
-  ).isRequired,
-  desiredAttributes: PropTypes.arrayOf(
-    PropTypes.oneOf(['jobId', 'name', 'productName'])
   ).isRequired,
 };

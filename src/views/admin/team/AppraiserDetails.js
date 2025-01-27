@@ -22,7 +22,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 // Import the appraiser data
 import tableDataComplex from './variables/tableDataComplex'; // Adjust the path if necessary
 
-export default function AppraiserDetails() {
+const AppraiserDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -256,4 +256,6 @@ export default function AppraiserDetails() {
       </Stack>
     </Container>
   );
-}
+};
+
+export default AppraiserDetails;

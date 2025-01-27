@@ -54,7 +54,7 @@ export const OrderProvider = ({ children }) => {
             ...order,
             orderStatus: newStatus,
             notifications: [
-              ...(Array.isArray(order.notifications) ? order.notifications : []),
+              ...order.notifications,
               {
                 message,
                 timestamp,
@@ -78,7 +78,7 @@ export const OrderProvider = ({ children }) => {
           return {
             ...order,
             notifications: [
-              ...(Array.isArray(order.notifications) ? order.notifications : []),
+              ...order.notifications,
               {
                 message,
                 timestamp,

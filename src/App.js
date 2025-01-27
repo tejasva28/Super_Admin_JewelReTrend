@@ -18,6 +18,8 @@ import DisbursedDetails from 'views/insurance/DisbursedDetails';
 import TransitDetails from 'views/insurance/TransitDetails';
 import { OrderProvider } from './views/orders/components/OrdersContext';
 import OrderDetails from './views/orders/OrderDetails';
+import ProductsWrapper from 'views/admin/products/ProductsWrapper';
+import ProductDetails from './views/admin/products/ProductDetailsSidebar';
 
 
 export default function Main() {
@@ -27,20 +29,29 @@ export default function Main() {
     <ChakraProvider theme={currentTheme}>
       <OrderProvider>
         <Routes>
-          <Route path="/auth/*" element={<AuthLayout />} />
-          <Route path="admin/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
-          <Route path="products/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
-          <Route path="rtl/*" element={<RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
+        <Route path="admin/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
+        <Route path="auth/*" element={<AuthLayout />} />
+                  <Route
+                    path="admin/*"
+                    element={
+                      <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+                    }
+                  />
+          <Route path="/products/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
+          <Route path="/rtl/*" element={<RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
           <Route path="/appraised/:id" element={<AppraisedDetails />} />
-          <Route path="/seller/:id" element={<SellerDetails theme={currentTheme} setTheme={setCurrentTheme} />} />
+          <Route path="/seller/:id" element={<SellerDetails />} />
           <Route path="/appraiser/:id" element={<AppraiserDetails />} />
           <Route path="/photographer/:id" element={<PhotographerDetails />} />
           <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/admin/products" element={<ProductsWrapper />} />
+        <Route path="/admin/products/:id" element={<ProductDetails />} />
+          <Route path="/admin/products" element={<ProductsWrapper />} />
           <Route path="/disbursed-details/:id" element={<DisbursedDetails />} />
           <Route path="/transit-details/:transitID" element={<TransitDetails />} />
           <Route path="/order-details/:orderId" element={<OrderDetails />} />
-          <Route path="/sessions" element={<SessionsPage theme={currentTheme} setTheme={setCurrentTheme} />} />
-          <Route path="/team*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
+          <Route path="/sessions" element={<SessionsPage />} />
+          <Route path="/team/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />} />
           <Route path="/" element={<Navigate to="/admin" replace />} />
         </Routes>
       </OrderProvider>

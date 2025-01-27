@@ -1,15 +1,24 @@
-// Chakra imports
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { Portal, Box, useDisclosure } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
-// Layout components
-import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
+import Navbar from 'components/navbar/NavbarAdmin.js';
 import { SidebarContext } from 'contexts/SidebarContext';
-import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 import routes from 'routes.js';
 
-// Custom Chakra theme
+const AdminLayout = ({ theme, setTheme }) => {
+  return (
+    <>
+      <Sidebar />
+      <Navbar />
+      <Outlet />
+    </>
+  );
+};
+
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
@@ -21,73 +30,62 @@ export default function Dashboard(props) {
   };
   const getActiveRoute = (routes) => {
     let activeRoute = 'Default Brand Text';
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse) {
-        let collapseActiveRoute = getActiveRoute(routes[i].items);
+    routes.forEach((route) => {
+      if (route.collapse) {
+        let collapseActiveRoute = getActiveRoute(route.items);
         if (collapseActiveRoute !== activeRoute) {
-          return collapseActiveRoute;
+          activeRoute = collapseActiveRoute;
         }
-      } else if (routes[i].category) {
-        let categoryActiveRoute = getActiveRoute(routes[i].items);
+      } else if (route.category) {
+        let categoryActiveRoute = getActiveRoute(route.items);
         if (categoryActiveRoute !== activeRoute) {
-          return categoryActiveRoute;
+          activeRoute = categoryActiveRoute;
         }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].name;
-        }
+      } else if (window.location.href.indexOf(route.layout + route.path) !== -1) {
+        activeRoute = route.name;
       }
-    }
+    });
     return activeRoute;
   };
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse) {
-        let collapseActiveNavbar = getActiveNavbar(routes[i].items);
+    routes.forEach((route) => {
+      if (route.collapse) {
+        let collapseActiveNavbar = getActiveNavbar(route.items);
         if (collapseActiveNavbar !== activeNavbar) {
-          return collapseActiveNavbar;
+          activeNavbar = collapseActiveNavbar;
         }
-      } else if (routes[i].category) {
-        let categoryActiveNavbar = getActiveNavbar(routes[i].items);
+      } else if (route.category) {
+        let categoryActiveNavbar = getActiveNavbar(route.items);
         if (categoryActiveNavbar !== activeNavbar) {
-          return categoryActiveNavbar;
+          activeNavbar = categoryActiveNavbar;
         }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].secondary;
-        }
+      } else if (window.location.href.indexOf(route.layout + route.path) !== -1) {
+        activeNavbar = route.secondary;
       }
-    }
+    });
     return activeNavbar;
   };
   const getActiveNavbarText = (routes) => {
     let activeNavbar = false;
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse) {
-        let collapseActiveNavbar = getActiveNavbarText(routes[i].items);
+    routes.forEach((route) => {
+      if (route.collapse) {
+        let collapseActiveNavbar = getActiveNavbarText(route.items);
         if (collapseActiveNavbar !== activeNavbar) {
-          return collapseActiveNavbar;
+          activeNavbar = collapseActiveNavbar;
         }
-      } else if (routes[i].category) {
-        let categoryActiveNavbar = getActiveNavbarText(routes[i].items);
+      } else if (route.category) {
+        let categoryActiveNavbar = getActiveNavbarText(route.items);
         if (categoryActiveNavbar !== activeNavbar) {
-          return categoryActiveNavbar;
+          activeNavbar = categoryActiveNavbar;
         }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].messageNavbar;
-        }
+      } else if (window.location.href.indexOf(route.layout + route.path) !== -1) {
+        activeNavbar = route.messageNavbar;
       }
-    }
+    });
     return activeNavbar;
   };
+
   const getRoutes = (routes) => {
     return routes.map((route, key) => {
       if (route.layout === '/admin') {
@@ -151,7 +149,7 @@ export default function Dashboard(props) {
                 minH="100vh"
                 pt="50px"
               >
-                <Routes>
+               <Routes>
                   {getRoutes(routes)}
                   <Route
                     path="/"

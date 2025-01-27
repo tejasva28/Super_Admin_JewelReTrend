@@ -21,7 +21,7 @@ import NFTMarketplace from 'views/admin/marketplace';
 import Profile from 'views/admin/profile';
 import Sales from 'views/admin/Sales';
 import Team from 'views/admin/team';
-import ProductDetails from 'views/admin/products/ProductDetails';
+// import ProductDetails from 'views/admin/products/ProductDetails';
 import AppraisedDetails from './views/admin/products/AppraisedDetails';
 import Products from 'views/admin/products';
 import AppraiserTable from 'views/admin/team/components/AppraiserTable';
@@ -52,22 +52,22 @@ const routes = [
     sidebar: true, // Show in the sidebar
     secondary: true,
   },
-  {
-    name: 'Products',
-    layout: '/admin',
-    path: '/products',
-    icon: (
-      <Icon
-        as={MdOutlineShoppingCart}
-        width="20px"
-        height="20px"
-        color="inherit"
-      />
-    ),
-    component: <Products />,
-    sidebar: true, // Show in the sidebar
-    secondary: true,
-  },
+  // {
+  //   name: 'Products',
+  //   layout: '/admin',
+  //   path: '/products',
+  //   icon: (
+  //     <Icon
+  //       as={MdOutlineShoppingCart}
+  //       width="20px"
+  //       height="20px"
+  //       color="inherit"
+  //     />
+  //   ),
+  //   component: <Products />,
+  //   sidebar: true, // Show in the sidebar
+  //   secondary: true,
+  // },
   {
     name: 'Orders',
     layout: '/admin',
@@ -84,21 +84,21 @@ const routes = [
     sidebar: true, // Show in the sidebar
     secondary: true,
   },
-  {
-    name: 'Insurance',
-    layout: '/admin',
-    path: '/insurace',
-    icon: <Icon as={GoDeviceMobile} width="20px" height="20px" color="inherit" />,
-    component: <Insurace />,
-    sidebar: true,
-  },
-  {
-    name: 'Product Details',
-    layout: '/admin',
-    path: '/products/:id',
-    component: <ProductDetails />,
-    sidebar: false,
-  },
+  // {
+  //   name: 'Insurance',
+  //   layout: '/admin',
+  //   path: '/insurace',
+  //   icon: <Icon as={GoDeviceMobile} width="20px" height="20px" color="inherit" />,
+  //   component: <Insurace />,
+  //   sidebar: true,
+  // },
+  // {
+  //   name: 'Product Details',
+  //   layout: '/admin',
+  //   path: '/products/:id',
+  //   component: <ProductDetails />,
+  //   sidebar: false,
+  // },
   {
     name: 'Appraised Data',
     layout: '/admin',

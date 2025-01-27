@@ -8,22 +8,15 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerCloseButton,
-  Button,
-  VStack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { FaPlus, FaList } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import AppraisalForm from "./appraisal/AppraisalForm"; // Import the new AppraisalForm component
 
 const AddProductSidebar = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
-
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
       <DrawerOverlay />
       <DrawerContent bg={useColorModeValue("white", "gray.800")}>
-        {/* Enhanced Close Button */}
         <DrawerCloseButton
           color={useColorModeValue("gray.800", "white")}
           fontSize="lg"
