@@ -34,6 +34,7 @@ import {
   addDays,
   isSameMonth,
   isSameDay,
+  differenceInCalendarWeeks,
 } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid'; // For unique job IDs
 import { useNavigate } from 'react-router-dom';
@@ -270,8 +271,9 @@ function MiniCalendar({ initialEvents = [] }) {
     const rows = [];
     let days = [];
     let day = startDate;
+    const numberOfWeeks = differenceInCalendarWeeks(endDate, startDate) + 1;
 
-    while (day <= endDate) {
+    for (let w = 0; w < numberOfWeeks; w++) {
       for (let i = 0; i < 7; i++) {
         const cloneDay = day;
 

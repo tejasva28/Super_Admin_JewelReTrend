@@ -41,7 +41,7 @@ function CalendarPage() {
           <Heading size="md" mb={4}>
             Upcoming Events
           </Heading>
-          {upcomingEvents.length === 0 ? (
+          (
             <Text>No upcoming events.</Text>
           ) : (
             <Stack spacing={4}>

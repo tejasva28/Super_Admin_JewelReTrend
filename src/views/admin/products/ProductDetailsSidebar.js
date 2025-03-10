@@ -139,8 +139,49 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
               </Text>
             )}
 
-            {/* Header: Product Name + Edit / Save / Cancel */}
-            <Flex justifyContent="space-between" alignItems="center">
+            {/* Product Image (just showing the first URL if multiple) */}
+            <Flex justifyContent="center">
+              {isEditing ? (
+                <Stack spacing={2} align="center">
+                  <Image
+                    src={
+                      editedProduct.pictures && editedProduct.pictures.length > 0
+                        ? `http://localhost:8080${editedProduct.pictures[0]}`
+                        : ""
+                    }
+                    alt={editedProduct.title}
+                    maxW="200"
+                    borderRadius="md"
+                    boxShadow="md"
+                  />
+                  <Text>Update Image URLs (comma-separated, for example):</Text>
+                  <Input
+                    name="pictures"
+                    value={Array.isArray(editedProduct.pictures) ? editedProduct.pictures.join(",") : ""}
+                    onChange={(e) => {
+                      // Convert CSV -> array
+                      const arr = e.target.value.split(",").map((s) => s.trim());
+                      setEditedProduct((prev) => ({ ...prev, pictures: arr }));
+                    }}
+                  />
+                </Stack>
+              ) : (
+                <Image
+                  src={
+                    editedProduct.pictures && editedProduct.pictures.length > 0
+                      ? `http://localhost:8080${editedProduct.pictures[0]}`
+                      : ""
+                  }
+                  alt={editedProduct.title}
+                  maxW="400px"
+                  borderRadius="md"
+                  boxShadow="md"
+                />
+              )}
+            </Flex>
+
+             {/* Header: Product Name + Edit / Save / Cancel */}
+             <Flex justifyContent="space-between" alignItems="center">
               {isEditing ? (
                 <Input
                   name="title"
@@ -173,47 +214,6 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
               </Flex>
             </Flex>
 
-            {/* Product Image (just showing the first URL if multiple) */}
-            <Flex justifyContent="center">
-              {isEditing ? (
-                <Stack spacing={2} align="center">
-                  <Image
-                    src={
-                      editedProduct.pictures && editedProduct.pictures.length > 0
-                        ? `http://localhost:8080${editedProduct.pictures[0]}`
-                        : ""
-                    }
-                    alt={editedProduct.title}
-                    maxW="400px"
-                    borderRadius="md"
-                    boxShadow="md"
-                  />
-                  <Text>Update Image URLs (comma-separated, for example):</Text>
-                  <Input
-                    name="pictures"
-                    value={Array.isArray(editedProduct.pictures) ? editedProduct.pictures.join(",") : ""}
-                    onChange={(e) => {
-                      // Convert CSV -> array
-                      const arr = e.target.value.split(",").map((s) => s.trim());
-                      setEditedProduct((prev) => ({ ...prev, pictures: arr }));
-                    }}
-                  />
-                </Stack>
-              ) : (
-                <Image
-                  src={
-                    editedProduct.pictures && editedProduct.pictures.length > 0
-                      ? `http://localhost:8080${editedProduct.pictures[0]}`
-                      : ""
-                  }
-                  alt={editedProduct.title}
-                  maxW="400px"
-                  borderRadius="md"
-                  boxShadow="md"
-                />
-              )}
-            </Flex>
-
             <Divider />
 
             {/* Main Grid: 1) General Details 2) Seller Details 3) Additional Details */}
@@ -242,17 +242,7 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                         </Text>
                         <Input
                           name="category"
-                          value={editedProduct.category || ""}
-                          onChange={handleInputChange}
-                        />
-                      </Flex>
-                      <Flex alignItems="center">
-                        <Text w="120px" fontWeight="semibold">
-                          Weight:
-                        </Text>
-                        <Input
-                          name="weight"
-                          value={editedProduct.weight || ""}
+                          value={editedProduct.jewelleryType || ""}
                           onChange={handleInputChange}
                         />
                       </Flex>
@@ -262,7 +252,7 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                         </Text>
                         <Input
                           name="lastUpdated"
-                          value={editedProduct.lastUpdated || ""}
+                          value={editedProduct.updatedAt || ""}
                           onChange={handleInputChange}
                         />
                       </Flex>
@@ -270,7 +260,7 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                   ) : (
                     <>
                       <Text>
-                        <strong>SKU ID:</strong> {editedProduct.skuId}
+                        <strong>SKU ID:</strong> {editedProduct.id}
                       </Text>
                       <Text>
                         <strong>Category:</strong> {editedProduct.jewelleryType}
@@ -279,7 +269,7 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                         <strong>Weight:</strong> {editedProduct.weight}
                       </Text>
                       <Text>
-                        <strong>Last Updated:</strong> {editedProduct.lastUpdated}
+                        <strong>Last Updated:</strong> {editedProduct.updatedAt}
                       </Text>
                     </>
                   )}
@@ -344,18 +334,18 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
               {/* Additional Details */}
               <Box borderWidth="1px" borderRadius="md" p={6} boxShadow="sm">
                 <Heading as="h2" size="md" mb={4}>
-                  Additional Details
+                  Appraisal Details
                 </Heading>
                 <Stack spacing={2}>
                   {isEditing ? (
                     <>
                       <Flex alignItems="center">
                         <Text w="120px" fontWeight="semibold">
-                          Appraiser:
+                          Gold Weight:
                         </Text>
                         <Input
                           name="appraiser"
-                          value={editedProduct.appraiser || ""}
+                          value={editedProduct.goldWeight || ""}
                           onChange={handleInputChange}
                         />
                       </Flex>
@@ -373,10 +363,10 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                   ) : (
                     <>
                       <Text>
-                        <strong>Appraiser:</strong> {editedProduct.appraiser}
+                        <strong>Gold Weight:</strong> {editedProduct.gold_weight}
                       </Text>
                       <Text>
-                        <strong>Photographer:</strong> {editedProduct.photographer}
+                        <strong>Diamond Weight:</strong> {editedProduct.diamond_weight}
                       </Text>
                     </>
                   )}
@@ -421,12 +411,12 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                 {isEditing ? (
                   <Flex alignItems="center">
                     <Text fontSize="2xl" fontWeight="bold" mr={2}>
-                      $
+                    ₹
                     </Text>
                     <Input
                       name="price"
                       type="number"
-                      value={editedProduct.price || ""}
+                      value={editedProduct.calculatedPrice || ""}
                       onChange={handleInputChange}
                       fontSize="2xl"
                       fontWeight="bold"
@@ -435,7 +425,7 @@ export default function ProductDetailsSidebar({ isOpen, onClose, product }) {
                   </Flex>
                 ) : (
                   <Text fontSize="2xl" fontWeight="bold">
-                    ${editedProduct.price}
+                    ₹{editedProduct.calculatedPrice}
                   </Text>
                 )}
               </Stack>
